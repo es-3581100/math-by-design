@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Phi Flow — Fibonacci Landing Page Template</title>
+  <meta
+    name="description"
+    content="A landing-page format template using Fibonacci geometry as hidden layout scaffolding rather than visible ornament."
+  />
+
+  <!--
+  ========================================================================
+  AGENT DESIGN CONTRACT — READ BEFORE MODIFYING THE PAGE
+  ========================================================================
+
+  PURPOSE
+  -------
+  This document uses Fibonacci geometry as a hidden composition scaffold.
+  It is NOT a request to draw a golden spiral with text. The visible page
+  should remain modern, editorial, legible, and mostly rectilinear.
+
+  PRIMARY PROGRESSION
+  -------------------
+  Tile 8 → Tile 5 → Tile 3 → Tile 2 → Tile 1A → Tile 1B
+
+  INTERPRETATION
+  --------------
+  - 8 = primary claim / strongest visual mass
+  - 5 = explanation / context / secondary emphasis
+  - 3 = proof / feature / evidence
+  - 2 = CTA / decision point / transition
+  - 1A/1B = microcopy, metadata, handoff, or exit detail
+
+  TEXT RULE
+  ---------
+  Let text FOLLOW the progression through:
+  - alignment changes
+  - width changes
+  - indentation
+  - line-length changes
+  - type-family changes
+  - weight/contrast changes
+  - deliberate whitespace
+
+  DO NOT:
+  - bend every line of text into a curve
+  - rotate text to imitate a spiral
+  - fill every Fibonacci tile
+  - make each tile look like a card
+  - preserve desktop geometry at the cost of mobile readability
+
+  RESPONSIVE EDGE CASE
+  --------------------
+  Below 760px, the geometric scaffold becomes advisory only. Keep semantic
+  flow order, collapse visible content to one column, and preserve hierarchy.
+  Never force micro-sized content merely to keep the Fibonacci outline intact.
+
+  DEV LAYER
+  ---------
+  Press the φ DEV button or Alt/Option+G to reveal the hidden scaffold.
+  Flow nodes can be dragged. They snap to meaningful Fibonacci tile edges.
+  Node positions are stored locally in the browser. Double-click any node
+  to reset only that node; use "Reset nodes" to reset all.
+
+  ========================================================================
+  -->
+
+  <style>
+    :root {
+      --phi: 1.61803398875;
+
+      /* Fibonacci-inspired type/rhythm scale. */
+      --step--1: clamp(.72rem, .68rem + .12vw, .82rem);
+      --step-0: clamp(.94rem, .88rem + .22vw, 1.05rem);
+      --step-1: clamp(1.16rem, 1.03rem + .45vw, 1.38rem);
+      --step-2: clamp(1.55rem, 1.24rem + 1vw, 2.05rem);
+      --step-3: clamp(2.35rem, 1.7rem + 2.7vw, 4.25rem);
+      --step-4: clamp(3.4rem, 2.2rem + 5.5vw, 7.4rem);
+
+      --space-1: .382rem;
+      --space-2: .618rem;
+      --space-3: 1rem;
+      --space-4: 1.618rem;
+      --space-5: 2.618rem;
+      --space-6: 4.236rem;
+      --space-7: 6.854rem;
+
+      --paper: #f1efe9;
+      --ink: #151712;
+      --muted: #686b61;
+      --hairline: color-mix(in srgb, var(--ink) 15%, transparent);
+      --wash: color-mix(in srgb, var(--ink) 4%, transparent);
+      --accent: #ff5a36;
+      --accent-2: #185f55;
+      --dev: #20d67a;
+
+      --shell: min(94vw, 1460px);
+      --radius: 1.35rem;
+      --ease: cubic-bezier(.2,.8,.2,1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 18%, rgba(255,255,255,.72), transparent 34rem),
+        linear-gradient(180deg, rgba(255,255,255,.22), transparent 34rem),
+        var(--paper);
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+    button, input { font: inherit; }
+
+    ::selection {
+      color: var(--paper);
+      background: var(--ink);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Public chrome                                                      */
+    /* ------------------------------------------------------------------ */
+
+    .shell {
+      width: var(--shell);
+      margin-inline: auto;
+    }
+
+    .site-header {
+      min-height: 5.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .72rem;
+      text-decoration: none;
+      font-weight: 780;
+      letter-spacing: -.04em;
+    }
+
+    .brand-mark {
+      width: 1.2rem;
+      aspect-ratio: 1;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      width: 38%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      right: -2px;
+      bottom: -2px;
+      background: var(--accent);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(1rem, 2vw, 2.4rem);
+      font-size: var(--step--1);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .nav a {
+      text-decoration: none;
+      opacity: .68;
+    }
+
+    .nav a:hover { opacity: 1; }
+
+    /* ------------------------------------------------------------------ */
+    /* Hero: visible content follows, rather than draws, the progression.  */
+    /* ------------------------------------------------------------------ */
+
+    .hero {
+      position: relative;
+      min-height: min(840px, calc(100svh - 5.25rem));
+      display: grid;
+      grid-template-columns: minmax(0, 1.618fr) minmax(18rem, 1fr);
+      grid-template-rows: auto 1fr auto;
+      gap: var(--space-4) var(--space-6);
+      padding: clamp(4rem, 8vw, 8rem) 0 clamp(3rem, 6vw, 6rem);
+      isolation: isolate;
+    }
+
+    .hero-kicker {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: var(--step--1);
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-kicker::before {
+      content: "";
+      width: 2.618rem;
+      height: 1px;
+      background: currentColor;
+      opacity: .65;
+    }
+
+    .hero-claim {
+      align-self: end;
+      max-width: 11.5ch;
+      margin: 0;
+      font-size: var(--step-4);
+      line-height: .86;
+      letter-spacing: -.075em;
+      font-weight: 850;
+      text-wrap: balance;
+    }
+
+    .hero-claim .soft {
+      display: block;
+      margin-left: .618em;
+      margin-top: .08em;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: -.055em;
+      color: var(--accent-2);
+    }
+
+    .hero-claim .tight {
+      display: block;
+      margin-left: .19em;
+      font-size: .618em;
+      line-height: 1.02;
+      letter-spacing: -.055em;
+      font-weight: 650;
+    }
+
+    .hero-context {
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      padding-top: 6vh;
+      max-width: 31rem;
+    }
+
+    .hero-context p {
+      margin: 0;
+      font-size: var(--step-1);
+      line-height: 1.58;
+      letter-spacing: -.02em;
+      text-wrap: pretty;
+    }
+
+    .hero-context p + p {
+      width: 78%;
+      margin-left: 13.2%;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: var(--step-0);
+      line-height: 1.62;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .8rem;
+    }
+
+    .button {
+      min-height: 3.1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .84rem 1.15rem;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: var(--step-0);
+      font-weight: 700;
+      transition:
+        transform .2s var(--ease),
+        background .2s var(--ease),
+        color .2s var(--ease);
+    }
+
+    .button.primary {
+      color: var(--paper);
+      background: var(--ink);
+    }
+
+    .button:hover { transform: translateY(-2px); }
+
+    .button.text {
+      border-color: transparent;
+      padding-inline: .35rem;
+      gap: .6rem;
+    }
+
+    .button.text::after {
+      content: "↗";
+      font-size: 1.18em;
+    }
+
+    .hero-foot {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.618fr) minmax(14rem, 1fr);
+      gap: var(--space-5);
+      align-items: end;
+      border-top: 1px solid var(--hairline);
+      padding-top: var(--space-4);
+    }
+
+    .proof-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .8rem 1.5rem;
+      color: var(--muted);
+      font-size: var(--step--1);
+      line-height: 1.45;
+    }
+
+    .proof-strip strong {
+      color: var(--ink);
+      font-size: var(--step-0);
+      font-weight: 760;
+    }
+
+    .read-direction {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: var(--step--1);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .read-direction .line {
+      width: 4.236rem;
+      height: 1px;
+      background: currentColor;
+      position: relative;
+    }
+
+    .read-direction .line::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: .38rem;
+      height: .38rem;
+      border-top: 1px solid currentColor;
+      border-right: 1px solid currentColor;
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Demonstration section: same hidden geometry, different expression.  */
+    /* ------------------------------------------------------------------ */
+
+    .flow-demo {
+      padding: var(--space-7) 0;
+      border-top: 1px solid var(--hairline);
+    }
+
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(13, minmax(0, 1fr));
+      grid-template-rows: auto auto auto;
+      gap: var(--space-3);
+      align-items: start;
+    }
+
+    .flow-demo .number {
+      grid-column: 1 / span 2;
+      grid-row: 1;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: var(--step-3);
+      font-style: italic;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .flow-demo h2 {
+      grid-column: 3 / span 7;
+      grid-row: 1;
+      margin: 0;
+      max-width: 11ch;
+      font-size: var(--step-3);
+      line-height: .98;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+
+    .flow-demo .lede {
+      grid-column: 9 / span 4;
+      grid-row: 1;
+      margin: var(--space-2) 0 0;
+      font-size: var(--step-0);
+      line-height: 1.62;
+      color: var(--muted);
+    }
+
+    .flow-demo .statement {
+      grid-column: 3 / span 6;
+      grid-row: 2;
+      margin: var(--space-5) 0 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: var(--step-2);
+      line-height: 1.25;
+      letter-spacing: -.025em;
+      text-wrap: balance;
+    }
+
+    .flow-demo .aside {
+      grid-column: 10 / span 3;
+      grid-row: 2;
+      margin: var(--space-6) 0 0;
+      padding-left: var(--space-4);
+      border-left: 1px solid var(--hairline);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: var(--step--1);
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .flow-demo .micro {
+      grid-column: 12 / span 2;
+      grid-row: 3;
+      margin: var(--space-5) 0 0;
+      font-size: var(--step--1);
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .section-rule {
+      width: var(--shell);
+      margin: 0 auto;
+      border: 0;
+      border-top: 1px solid var(--hairline);
+    }
+
+    .feature-band {
+      width: var(--shell);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.618fr 1fr;
+      gap: var(--space-6);
+      padding: var(--space-7) 0;
+    }
+
+    .feature-band h3 {
+      margin: 0;
+      max-width: 13ch;
+      font-size: var(--step-2);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+    }
+
+    .feature-band .feature-list {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .feature {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--hairline);
+    }
+
+    .feature span {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: var(--step--1);
+      color: var(--muted);
+    }
+
+    .feature p {
+      margin: 0;
+      line-height: 1.58;
+      max-width: 42rem;
+    }
+
+    footer.shell {
+      min-height: 8rem;
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      color: var(--muted);
+      font-size: var(--step--1);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Hidden Fibonacci development plane                                 */
+    /* ------------------------------------------------------------------ */
+
+    .dev-plane {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s var(--ease), visibility .2s var(--ease);
+    }
+
+    body.dev-mode .dev-plane {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .fib-stage {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(92vw, 1300px);
+      aspect-ratio: 13 / 8;
+      transform: translate(-50%, -50%);
+      display: grid;
+      grid-template-columns: repeat(13, minmax(0, 1fr));
+      grid-template-rows: repeat(8, minmax(0, 1fr));
+      border: 1px solid color-mix(in srgb, var(--dev) 85%, transparent);
+      background: color-mix(in srgb, #07100b 7%, transparent);
+      box-shadow: 0 0 0 100vmax rgba(0,0,0,.16);
+      pointer-events: auto;
+      user-select: none;
+    }
+
+    .fib-tile {
+      position: relative;
+      border: 1px solid color-mix(in srgb, var(--dev) 72%, transparent);
+      background:
+        linear-gradient(135deg,
+          color-mix(in srgb, var(--dev) 6%, transparent),
+          color-mix(in srgb, var(--dev) 1%, transparent));
+      color: var(--dev);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .55rem;
+      overflow: hidden;
+    }
+
+    .fib-tile::before {
+      content: attr(data-agent-role);
+      opacity: .75;
+    }
+
+    .tile-8 { grid-column: 1 / span 8; grid-row: 1 / span 8; }
+    .tile-5 { grid-column: 9 / span 5; grid-row: 1 / span 5; }
+    .tile-3 { grid-column: 9 / span 3; grid-row: 6 / span 3; }
+    .tile-2 { grid-column: 12 / span 2; grid-row: 6 / span 2; }
+    .tile-1a { grid-column: 12 / span 1; grid-row: 8 / span 1; }
+    .tile-1b { grid-column: 13 / span 1; grid-row: 8 / span 1; }
+
+    #flow-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    #flow-lines polyline {
+      fill: none;
+      stroke: var(--dev);
+      stroke-width: 1.4;
+      vector-effect: non-scaling-stroke;
+      stroke-dasharray: 5 6;
+      opacity: .92;
+    }
+
+    .flow-node {
+      position: absolute;
+      left: calc(var(--x) * 100%);
+      top: calc(var(--y) * 100%);
+      width: 1.95rem;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid var(--dev);
+      color: #08150d;
+      background: var(--dev);
+      box-shadow: 0 0 0 .32rem rgba(32,214,122,.12);
+      font: 800 11px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      cursor: grab;
+      touch-action: none;
+      pointer-events: auto;
+      z-index: 4;
+    }
+
+    .flow-node:active { cursor: grabbing; }
+
+    .flow-node::after {
+      content: attr(data-label);
+      position: absolute;
+      left: calc(100% + .55rem);
+      top: 50%;
+      transform: translateY(-50%);
+      width: max-content;
+      max-width: 13rem;
+      padding: .35rem .45rem;
+      border: 1px solid rgba(32,214,122,.48);
+      background: rgba(5,15,9,.82);
+      color: #c8ffe0;
+      font-weight: 600;
+      letter-spacing: .02em;
+      text-align: left;
+    }
+
+    .dev-panel {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      width: min(24rem, calc(100vw - 2rem));
+      padding: .8rem;
+      border: 1px solid rgba(32,214,122,.45);
+      border-radius: .8rem;
+      background: rgba(5, 12, 8, .9);
+      color: #d8ffe8;
+      font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      pointer-events: auto;
+      backdrop-filter: blur(18px);
+    }
+
+    .dev-panel strong { color: var(--dev); }
+
+    .dev-panel p {
+      margin: .45rem 0 0;
+      opacity: .8;
+    }
+
+    .dev-panel .dev-actions {
+      display: flex;
+      gap: .5rem;
+      margin-top: .75rem;
+    }
+
+    .dev-panel button {
+      border: 1px solid rgba(32,214,122,.45);
+      border-radius: 999px;
+      background: transparent;
+      color: #d8ffe8;
+      padding: .4rem .65rem;
+      cursor: pointer;
+    }
+
+    .dev-toggle {
+      position: fixed;
+      right: .75rem;
+      bottom: .75rem;
+      z-index: 9999;
+      min-width: 3.2rem;
+      min-height: 2rem;
+      border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+      border-radius: 999px;
+      color: var(--ink);
+      background: color-mix(in srgb, var(--paper) 84%, transparent);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .08em;
+      opacity: .18;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .dev-toggle:hover,
+    .dev-toggle:focus-visible,
+    body.dev-mode .dev-toggle {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+
+    body.dev-mode .dev-toggle {
+      color: #08150d;
+      border-color: var(--dev);
+      background: var(--dev);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Responsive behavior                                                */
+    /* ------------------------------------------------------------------ */
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: var(--space-5);
+        min-height: auto;
+      }
+
+      .hero-kicker,
+      .hero-claim,
+      .hero-context,
+      .hero-foot {
+        grid-column: 1;
+      }
+
+      .hero-context {
+        padding-top: 0;
+        max-width: 42rem;
+      }
+
+      .hero-context p + p {
+        width: 83%;
+        margin-left: 8%;
+      }
+
+      .hero-foot {
+        grid-template-columns: 1fr;
+      }
+
+      .read-direction {
+        justify-self: start;
+      }
+
+      .feature-band {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-demo .lede { grid-column: 9 / span 5; }
+    }
+
+    @media (max-width: 760px) {
+      .site-header {
+        min-height: 4.5rem;
+      }
+
+      .nav a:not(:last-child) { display: none; }
+
+      .hero {
+        padding-top: var(--space-6);
+      }
+
+      .hero-claim {
+        max-width: 9ch;
+        font-size: clamp(3.1rem, 16vw, 5.8rem);
+      }
+
+      .hero-claim .soft {
+        margin-left: .22em;
+      }
+
+      .flow-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+      }
+
+      .flow-demo .number,
+      .flow-demo h2,
+      .flow-demo .lede,
+      .flow-demo .statement,
+      .flow-demo .aside,
+      .flow-demo .micro {
+        grid-column: 1;
+        grid-row: auto;
+        margin: 0;
+      }
+
+      .flow-demo .lede,
+      .flow-demo .statement {
+        max-width: 36rem;
+      }
+
+      .flow-demo .aside {
+        width: 84%;
+        margin-left: 16%;
+      }
+
+      .flow-demo .micro {
+        width: 50%;
+        margin-left: 50%;
+      }
+
+      footer.shell {
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .fib-stage {
+        width: 94vw;
+      }
+
+      .flow-node::after {
+        display: none;
+      }
+
+      .dev-panel {
+        right: .5rem;
+        top: .5rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header shell">
+    <a class="brand" href="#" aria-label="Phi Flow home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>PHI / FLOW</span>
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+      <a href="#principle">Principle</a>
+      <a href="#example">Example</a>
+      <a href="#build">Build</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero shell" id="principle" aria-labelledby="hero-title">
+      <div class="hero-kicker">Hidden geometry / visible hierarchy</div>
+
+      <!--
+        AGENT: TILE 8 — dominant claim.
+        Occupy the largest visual field with ONE main idea.
+        The text itself remains horizontal and readable.
+      -->
+      <h1 class="hero-claim" id="hero-title">
+        Build with
+        <span class="soft">proportion,</span>
+        <span class="tight">not decoration.</span>
+      </h1>
+
+      <!--
+        AGENT: TILE 5 — contextual explanation.
+        Narrow the text measure. Change type voice once. Use indentation as
+        movement instead of rotating or curving the copy.
+      -->
+      <div class="hero-context">
+        <p>
+          Fibonacci structure can guide where attention lands without becoming
+          the thing the visitor sees. Use the geometry to decide mass, pacing,
+          alignment and transition.
+        </p>
+
+        <p>
+          The eye should feel progression before it consciously notices a grid.
+          Geometry is the backstage crew, not the performer.
+        </p>
+
+        <div class="actions">
+          <a class="button primary" href="#example">See the flow</a>
+          <a class="button text" href="#build">Use the pattern</a>
+        </div>
+      </div>
+
+      <!-- AGENT: TILE 3 → TILE 2 handoff: proof first, direction second. -->
+      <div class="hero-foot">
+        <div class="proof-strip" aria-label="Design principles">
+          <span><strong>8</strong><br />Primary mass</span>
+          <span><strong>5</strong><br />Context</span>
+          <span><strong>3</strong><br />Evidence</span>
+          <span><strong>2</strong><br />Decision</span>
+          <span><strong>1 + 1</strong><br />Metadata / exit</span>
+        </div>
+
+        <div class="read-direction" aria-hidden="true">
+          follow the mass
+          <span class="line"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="flow-demo shell" id="example" aria-labelledby="flow-heading">
+      <div class="flow-grid">
+        <!--
+          This section demonstrates a SECOND composition from the same scale.
+          The goal is variation, not repetition of the hero's exact geometry.
+        -->
+        <div class="number" aria-hidden="true">φ</div>
+
+        <h2 id="flow-heading">A progression can change voice without losing direction.</h2>
+
+        <p class="lede">
+          Begin broad and emphatic. Then tighten the measure. Let the next piece
+          shift sideways, reduce in scale, or switch type family. The movement
+          comes from composition.
+        </p>
+
+        <p class="statement">
+          “Large → narrow → offset → precise” is often enough to make the eye
+          travel. No spiral-shaped paragraph required.
+        </p>
+
+        <p class="aside">
+          AGENT NOTE:<br />
+          typography may change family, weight, width and alignment at handoff
+          points. Preserve semantic order in the DOM.
+        </p>
+
+        <p class="micro">
+          Finish small. A good composition knows when to stop speaking.
+        </p>
+      </div>
+    </section>
+
+    <hr class="section-rule" />
+
+    <section class="feature-band" id="build" aria-labelledby="build-heading">
+      <h3 id="build-heading">Use the ratio as a constraint system, not a visual theme.</h3>
+
+      <div class="feature-list">
+        <article class="feature">
+          <span>01 / MASS</span>
+          <p>
+            Give the primary message about 1.618× the visual authority of its
+            supporting region through width, scale, contrast or whitespace.
+          </p>
+        </article>
+
+        <article class="feature">
+          <span>02 / FLOW</span>
+          <p>
+            Handoffs occur at shared edges: headline to explanation, explanation
+            to proof, proof to decision. The dev nodes make those transitions explicit.
+          </p>
+        </article>
+
+        <article class="feature">
+          <span>03 / VARIATION</span>
+          <p>
+            A page built from one ratio should not look like one repeated module.
+            Change alignment, type voice, line length and density while keeping
+            the same underlying progression.
+          </p>
+        </article>
+
+        <article class="feature">
+          <span>04 / MOBILE</span>
+          <p>
+            On small screens, hierarchy outranks geometry. Preserve order and
+            proportion cues, but allow the physical tile arrangement to collapse.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <span>Fibonacci scaffold / editorial surface</span>
+    <span>Alt/Option + G toggles the developer layer</span>
+  </footer>
+
+  <!--
+  ==========================================================================
+  MACHINE-READABLE LAYOUT MAP
+  --------------------------------------------------------------------------
+  This survives visual redesign. Agents should treat this as the source of
+  truth for the progression, not the incidental pixel positions in a screenshot.
+  ==========================================================================
+  -->
+  <script type="application/json" id="agent-layout-contract">
+  {
+    "schema": "phi-flow-layout/v1",
+    "intent": "Fibonacci proportions guide visual hierarchy while remaining invisible in normal presentation.",
+    "desktopTileGrid": {
+      "columns": 13,
+      "rows": 8,
+      "tiles": [
+        {"id":"fib-8","value":8,"col":[1,8],"row":[1,8],"role":"primary claim / dominant mass"},
+        {"id":"fib-5","value":5,"col":[9,13],"row":[1,5],"role":"context / explanation"},
+        {"id":"fib-3","value":3,"col":[9,11],"row":[6,8],"role":"proof / feature / evidence"},
+        {"id":"fib-2","value":2,"col":[12,13],"row":[6,7],"role":"CTA / decision / transition"},
+        {"id":"fib-1a","value":1,"col":[12,12],"row":[8,8],"role":"microcopy / metadata"},
+        {"id":"fib-1b","value":1,"col":[13,13],"row":[8,8],"role":"exit / handoff"}
+      ]
+    },
+    "flow": [
+      {"order":1,"from":"fib-8","to":"fib-5","instruction":"Move from dominant claim into narrower explanatory copy."},
+      {"order":2,"from":"fib-5","to":"fib-3","instruction":"Reduce scale and increase specificity."},
+      {"order":3,"from":"fib-3","to":"fib-2","instruction":"Convert evidence into a decision or action."},
+      {"order":4,"from":"fib-2","to":"fib-1a","instruction":"Resolve with metadata, qualifier, or trust detail."},
+      {"order":5,"from":"fib-1a","to":"fib-1b","instruction":"End with the smallest semantic handoff or exit."}
+    ],
+    "typography": {
+      "rule": "Use size, family, weight, width and alignment shifts to express progression. Keep text baselines readable and mostly horizontal.",
+      "forbidden": [
+        "spiral-shaped paragraphs",
+        "rotating every text block",
+        "one card per tile",
+        "forcing desktop geometry on mobile"
+      ]
+    },
+    "responsive": {
+      "belowPx": 760,
+      "rule": "Collapse physical Fibonacci tiling; preserve semantic flow order and relative emphasis."
+    }
+  }
+  </script>
+
+  <!-- Hidden development overlay. aria-hidden keeps it out of reading flow. -->
+  <aside class="dev-plane" id="dev-plane" aria-hidden="true">
+    <div class="fib-stage" id="fib-stage">
+      <div class="fib-tile tile-8" data-tile="8" data-agent-role="8 / primary mass"></div>
+      <div class="fib-tile tile-5" data-tile="5" data-agent-role="5 / context"></div>
+      <div class="fib-tile tile-3" data-tile="3" data-agent-role="3 / evidence"></div>
+      <div class="fib-tile tile-2" data-tile="2" data-agent-role="2 / decision"></div>
+      <div class="fib-tile tile-1a" data-tile="1a" data-agent-role="1 / metadata"></div>
+      <div class="fib-tile tile-1b" data-tile="1b" data-agent-role="1 / exit"></div>
+
+      <svg id="flow-lines" viewBox="0 0 1000 615.384" preserveAspectRatio="none" aria-hidden="true">
+        <polyline id="flow-polyline" points=""></polyline>
+      </svg>
+
+      <!--
+        AGENT FLOW NODES
+        ----------------
+        Nodes intentionally begin on meaningful tile edges/junctions.
+        Dragging is a design-debugging aid. JS snaps them to edge lines.
+      -->
+      <button class="flow-node" data-node="1" data-label="01 claim → context"
+        style="--x:.6153846; --y:.22" aria-label="Flow node 1">1</button>
+
+      <button class="flow-node" data-node="2" data-label="02 context → evidence"
+        style="--x:.6153846; --y:.625" aria-label="Flow node 2">2</button>
+
+      <button class="flow-node" data-node="3" data-label="03 evidence → decision"
+        style="--x:.8461538; --y:.72" aria-label="Flow node 3">3</button>
+
+      <button class="flow-node" data-node="4" data-label="04 decision → metadata"
+        style="--x:.9230769; --y:.875" aria-label="Flow node 4">4</button>
+
+      <button class="flow-node" data-node="5" data-label="05 metadata → exit"
+        style="--x:.9615384; --y:1" aria-label="Flow node 5">5</button>
+    </div>
+
+    <div class="dev-panel">
+      <strong>φ DEV / Fibonacci scaffold</strong>
+      <p>
+        13×8 containing grid. Squares: 8, 5, 3, 2, 1, 1.
+        Drag nodes to test alternate reading paths; they snap to tile edges.
+      </p>
+      <p>
+        Rule: use the scaffold to govern hierarchy and handoff. Do not literally
+        spiral the visible copy.
+      </p>
+      <div class="dev-actions">
+        <button type="button" id="reset-nodes">Reset nodes</button>
+        <button type="button" id="close-dev">Close</button>
+      </div>
+    </div>
+  </aside>
+
+  <button
+    class="dev-toggle"
+    id="dev-toggle"
+    type="button"
+    aria-controls="dev-plane"
+    aria-pressed="false"
+    title="Toggle Fibonacci development layer (Alt/Option+G)"
+  >φ DEV</button>
+
+  <script>
+    (() => {
+      const body = document.body;
+      const stage = document.getElementById("fib-stage");
+      const toggle = document.getElementById("dev-toggle");
+      const close = document.getElementById("close-dev");
+      const reset = document.getElementById("reset-nodes");
+      const polyline = document.getElementById("flow-polyline");
+      const nodes = [...document.querySelectorAll(".flow-node")];
+
+      const STORAGE_KEY = "phi-flow-node-positions-v1";
+
+      const defaults = {
+        "1": { x: .6153846, y: .22 },
+        "2": { x: .6153846, y: .625 },
+        "3": { x: .8461538, y: .72 },
+        "4": { x: .9230769, y: .875 },
+        "5": { x: .9615384, y: 1 }
+      };
+
+      /*
+        Snap lines come from the real edges of the 13×8 Fibonacci partition:
+        X: 0 | 8/13 | 11/13 | 12/13 | 13/13
+        Y: 0 | 5/8 | 7/8 | 8/8
+
+        A node only snaps if it is near an edge. Otherwise it may float so a
+        designer can test alternate paths without fighting the tool.
+      */
+      const xEdges = [0, 8/13, 11/13, 12/13, 1];
+      const yEdges = [0, 5/8, 7/8, 1];
+      const SNAP_DISTANCE = .028;
+
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+      function nearest(value, choices) {
+        return choices.reduce((best, current) =>
+          Math.abs(current - value) < Math.abs(best - value) ? current : best
+        );
+      }
+
+      function snap(value, edges) {
+        const candidate = nearest(value, edges);
+        return Math.abs(candidate - value) <= SNAP_DISTANCE ? candidate : value;
+      }
+
+      function readNode(node) {
+        return {
+          x: parseFloat(node.style.getPropertyValue("--x")) || 0,
+          y: parseFloat(node.style.getPropertyValue("--y")) || 0
+        };
+      }
+
+      function placeNode(node, x, y) {
+        node.style.setProperty("--x", clamp(x, 0, 1));
+        node.style.setProperty("--y", clamp(y, 0, 1));
+      }
+
+      function saveNodes() {
+        const payload = {};
+        nodes.forEach(node => payload[node.dataset.node] = readNode(node));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      }
+
+      function loadNodes() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+          nodes.forEach(node => {
+            const p = saved[node.dataset.node] || defaults[node.dataset.node];
+            placeNode(node, p.x, p.y);
+          });
+        } catch {
+          nodes.forEach(node => {
+            const p = defaults[node.dataset.node];
+            placeNode(node, p.x, p.y);
+          });
+        }
+        drawFlow();
+      }
+
+      function resetNodes() {
+        localStorage.removeItem(STORAGE_KEY);
+        nodes.forEach(node => {
+          const p = defaults[node.dataset.node];
+          placeNode(node, p.x, p.y);
+        });
+        drawFlow();
+      }
+
+      function drawFlow() {
+        const points = nodes
+          .sort((a, b) => Number(a.dataset.node) - Number(b.dataset.node))
+          .map(node => {
+            const { x, y } = readNode(node);
+            return `${x * 1000},${y * 615.384}`;
+          })
+          .join(" ");
+
+        polyline.setAttribute("points", points);
+      }
+
+      function setDev(open) {
+        body.classList.toggle("dev-mode", open);
+        toggle.setAttribute("aria-pressed", String(open));
+      }
+
+      toggle.addEventListener("click", () => setDev(!body.classList.contains("dev-mode")));
+      close.addEventListener("click", () => setDev(false));
+      reset.addEventListener("click", resetNodes);
+
+      window.addEventListener("keydown", event => {
+        if ((event.altKey || event.metaKey) && event.key.toLowerCase() === "g") {
+          event.preventDefault();
+          setDev(!body.classList.contains("dev-mode"));
+        }
+        if (event.key === "Escape" && body.classList.contains("dev-mode")) {
+          setDev(false);
+        }
+      });
+
+      nodes.forEach(node => {
+        let dragging = false;
+
+        const move = event => {
+          if (!dragging) return;
+          const rect = stage.getBoundingClientRect();
+          let x = (event.clientX - rect.left) / rect.width;
+          let y = (event.clientY - rect.top) / rect.height;
+
+          x = snap(clamp(x, 0, 1), xEdges);
+          y = snap(clamp(y, 0, 1), yEdges);
+
+          placeNode(node, x, y);
+          drawFlow();
+        };
+
+        node.addEventListener("pointerdown", event => {
+          dragging = true;
+          node.setPointerCapture(event.pointerId);
+          event.preventDefault();
+        });
+
+        node.addEventListener("pointermove", move);
+
+        node.addEventListener("pointerup", event => {
+          dragging = false;
+          if (node.hasPointerCapture(event.pointerId)) {
+            node.releasePointerCapture(event.pointerId);
+          }
+          saveNodes();
+        });
+
+        node.addEventListener("pointercancel", () => {
+          dragging = false;
+          saveNodes();
+        });
+
+        node.addEventListener("dblclick", event => {
+          event.preventDefault();
+          const p = defaults[node.dataset.node];
+          placeNode(node, p.x, p.y);
+          drawFlow();
+          saveNodes();
+        });
+      });
+
+      window.addEventListener("resize", drawFlow);
+
+      // Optional query-string convenience for design reviews.
+      if (new URLSearchParams(location.search).get("dev") === "1") {
+        setDev(true);
+      }
+
+      loadNodes();
+    })();
+  </script>
+</body>
+</html>

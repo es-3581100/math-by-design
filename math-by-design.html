@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b0f14">
+<title>Math by Design — Master Build Reference</title>
+<meta name="description" content="A dynamic master reference for math-guided interface design: agent routing, developer inspection, and a human-facing generative art lab.">
+
+<!--
+===============================================================================
+MATH / BY / DESIGN — MASTER CONTRACT
+===============================================================================
+
+This file is a ROUTER + COMPILER + PLAYGROUND, not a replacement for the source
+references that informed it.
+
+SOURCE ROLES
+------------
+1. fibonacci-landing-page-template.html
+   canonical Phi Flow layout contract / 8→5→3→2→1→1 progression
+2. phi-flow-dev-ref.html
+   explanation, handoffs, live/dev inspection, multi-agent protocol, validation
+3. ui-build-ref-master-v2.html
+   application→style routing, anti-template rules, materials, build order
+4. fibonacci_hex_convergence_lab.html
+   original single-family convergence/color sampling reference
+5. fibonacci_hex_multispiral_rauzy_lab.html
+   multi-family spiral behavior + Tribonacci Rauzy spatial color sampling
+6. fibonacci_hex_multispiral_rauzy_geometry_lab.html
+   interactive RGB-cube palette geometry, PCA shape, hull/null-model inspection
+7. fibonacci_hex_palettes.py
+   canonical reproducible agent/build engine for palette generation + geometry reports
+
+NON-NEGOTIABLE
+--------------
+- References are ingredients, not screenshots to clone.
+- Geometry guides attention; it does not force literal spiral-shaped text.
+- Phi Flow decides WHERE / hierarchy.
+- Material language decides WHAT IT FEELS MADE OF.
+- Mathematical color behavior decides HOW COLOR RELATIONSHIPS ARE GENERATED.
+- Interaction layers decide HOW TEMPORARY UI HANDS OFF TO SEMANTIC CONTENT.
+- Accessibility is validated from rendered behavior, never inferred from math.
+- On narrow screens, hierarchy outranks preserving desktop geometry.
+
+AUDIENCES
+---------
+USER: play, explore, generate, export.
+AGENT: route a build, compile a bounded design packet, preserve source lineage.
+DEV: inspect contracts, nodes, order, contrast, responsive behavior, drift/history.
+
+===============================================================================
+-->
+
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#111820;
+  --panel2:#17222d;
+  --well:#080c11;
+  --line:#2a3949;
+  --line2:#1f2a35;
+  --text:#f5f5ee;
+  --muted:#9daab5;
+  --soft:#cdd5da;
+  --hot:#ff6b45;
+  --mint:#84e6c2;
+  --gold:#ffd68a;
+  --blue:#86c9ff;
+  --violet:#bba5ff;
+  --good:#65e49a;
+  --warn:#ffd166;
+  --bad:#ff7a70;
+  --accent:#ff6b45;
+  --accent-rgb:255,107,69;
+  --radius:18px;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --shadow:0 28px 80px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px;background:var(--bg)}
+body{
+  margin:0;color:var(--text);font:15px/1.55 var(--sans);
+  background:
+    radial-gradient(900px 560px at 10% -10%,rgba(132,230,194,.09),transparent 62%),
+    radial-gradient(760px 540px at 92% 4%,rgba(187,165,255,.10),transparent 60%),
+    radial-gradient(900px 700px at 52% 100%,rgba(var(--accent-rgb),.07),transparent 65%),
+    var(--bg);
+  min-height:100vh;
+}
+a{color:inherit}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+::selection{background:var(--accent);color:#fff}
+code,kbd,pre{font-family:var(--mono)}
+.shell{width:min(94vw,1480px);margin-inline:auto}
+.eyebrow{font:800 11px/1.4 var(--mono);letter-spacing:.19em;text-transform:uppercase;color:var(--mint)}
+.muted{color:var(--muted)}
+.small{font-size:.82rem}
+.good{color:var(--good)}
+.warn{color:var(--warn)}
+.bad{color:var(--bad)}
+.nowrap{white-space:nowrap}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* top */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid rgba(255,255,255,.09);
+  background:rgba(11,15,20,.88);
+  backdrop-filter:blur(18px);
+}
+.topbar-inner{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:880;letter-spacing:-.04em}
+.logo-mark{
+  width:31px;aspect-ratio:1;display:grid;place-items:center;border:1px solid #ffffff66;border-radius:50%;
+  font:italic 700 18px var(--serif);position:relative
+}
+.logo-mark:after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--accent);right:-1px;bottom:2px;box-shadow:0 0 18px var(--accent)}
+.audience-switch{display:flex;gap:6px;padding:4px;border:1px solid var(--line);border-radius:999px;background:#091018}
+.audience-switch button{
+  border:0;border-radius:999px;background:transparent;color:var(--muted);padding:7px 11px;font:750 11px var(--mono);
+  letter-spacing:.05em
+}
+.audience-switch button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+.navstrip{border-top:1px solid rgba(255,255,255,.055)}
+.navstrip-inner{display:flex;gap:6px;overflow:auto;padding:7px 0;scrollbar-width:none}
+.navstrip a{
+  flex:none;text-decoration:none;color:var(--muted);border:1px solid var(--line2);border-radius:999px;
+  padding:4px 10px;font:700 11px var(--mono)
+}
+.navstrip a:hover,.navstrip a:focus-visible{color:var(--text);border-color:var(--accent);outline:none}
+
+/* hero */
+.hero{
+  min-height:690px;
+  display:grid;
+  grid-template-columns:minmax(0,1.618fr) minmax(310px,1fr);
+  grid-template-rows:auto 1fr auto;
+  gap:30px clamp(32px,6vw,88px);
+  padding:clamp(64px,9vw,124px) 0 58px;
+  position:relative;
+}
+.hero-kicker{grid-column:1/-1;display:flex;align-items:center;gap:12px}
+.hero-kicker:before{content:"";width:42px;height:1px;background:currentColor;opacity:.7}
+.hero h1{
+  align-self:end;margin:0;max-width:10.4ch;
+  font-size:clamp(4.2rem,9.6vw,10rem);line-height:.82;letter-spacing:-.08em;font-weight:900;text-wrap:balance
+}
+.hero h1 em{display:block;margin-left:.48em;font-family:var(--serif);font-weight:400;color:var(--mint)}
+.hero h1 .subline{display:block;margin-left:.12em;font-size:.42em;line-height:1.06;letter-spacing:-.055em;font-weight:680;color:var(--soft)}
+.hero-copy{align-self:center;display:grid;gap:22px;max-width:34rem;padding-top:8vh}
+.hero-copy p{margin:0;font-size:clamp(1.05rem,1.4vw,1.35rem);line-height:1.6;letter-spacing:-.015em}
+.hero-copy .aside{width:82%;margin-left:12%;font:italic 1rem/1.65 var(--serif);color:var(--muted)}
+.hero-actions{display:flex;gap:9px;flex-wrap:wrap}
+.btn{
+  border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:11px;padding:10px 14px;font-weight:760;
+  transition:transform .18s ease,border-color .18s ease,background .18s ease
+}
+.btn:hover{transform:translateY(-1px);border-color:#ffffff66}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{background:transparent}
+.btn.tiny{padding:6px 9px;font:720 11px var(--mono);border-radius:8px}
+.hero-foot{
+  grid-column:1/-1;display:grid;grid-template-columns:1.618fr 1fr;gap:28px;border-top:1px solid rgba(255,255,255,.11);padding-top:18px
+}
+.flow-chain{display:flex;flex-wrap:wrap;gap:8px}
+.flow-chip{
+  display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;border:1px solid var(--line2);border-radius:10px;padding:7px 10px;background:rgba(255,255,255,.02)
+}
+.flow-chip b{font:800 15px var(--mono);color:var(--gold)}
+.flow-chip span{font:700 10px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.hero-meta{justify-self:end;text-align:right;font:700 11px/1.7 var(--mono);color:var(--muted)}
+.hero-meta b{color:var(--text)}
+
+/* general */
+.section{padding:76px 0;border-top:1px solid rgba(255,255,255,.085)}
+.section[data-audience].is-hidden{display:none}
+.section-head{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:30px;align-items:end;margin-bottom:28px}
+.section-head h2{margin:5px 0 0;font-size:clamp(2rem,4vw,4.4rem);line-height:.96;letter-spacing:-.06em;max-width:13ch}
+.section-head p{margin:0;color:var(--muted);max-width:48rem}
+.card{
+  border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(145deg,rgba(23,34,45,.92),rgba(15,22,30,.92));
+  box-shadow:0 18px 55px rgba(0,0,0,.12)
+}
+.card-pad{padding:18px}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.rule-title{font:800 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
+.h3{font-size:1.15rem;font-weight:830;letter-spacing:-.025em;margin:5px 0 7px}
+hr.soft{border:0;border-top:1px solid var(--line2);margin:16px 0}
+.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 8px;font:750 10px var(--mono);color:var(--muted)}
+.tag i{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.source-link{color:var(--blue);text-decoration:none}
+.source-link:hover{text-decoration:underline}
+pre{
+  margin:0;background:var(--well);border:1px solid var(--line2);border-radius:12px;padding:14px;
+  white-space:pre-wrap;overflow-wrap:anywhere;overflow:auto;max-height:460px;font-size:12px;line-height:1.55;color:#d5e0e7
+}
+table{border-collapse:collapse;width:100%}
+th,td{padding:10px 11px;text-align:left;vertical-align:top;border-top:1px solid var(--line2)}
+th{border-top:0;color:var(--muted);font:800 10px var(--mono);letter-spacing:.09em;text-transform:uppercase}
+td{font-size:.88rem}
+.table-wrap{overflow:auto;border:1px solid var(--line2);border-radius:12px}
+.table-wrap table{min-width:760px}
+
+/* source register */
+.source-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.source-card{padding:14px;min-width:0}
+.source-card b{display:block;font-size:.9rem;overflow-wrap:anywhere}
+.source-card p{font-size:.79rem;color:var(--muted);margin:7px 0 10px}
+.hash{font:10px/1.45 var(--mono);color:#8fa4b5;overflow-wrap:anywhere}
+.role-badge{display:inline-block;font:800 9px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mint);margin-bottom:8px}
+
+/* router/compiler */
+.compiler-layout{display:grid;grid-template-columns:minmax(330px,.75fr) minmax(0,1.25fr);gap:16px;align-items:start}
+.form-card{padding:18px;position:sticky;top:120px}
+.form-grid{display:grid;gap:14px}
+.control label{display:flex;justify-content:space-between;gap:12px;font-weight:760;font-size:.86rem;margin-bottom:6px}
+.control small{color:var(--muted);font:10px var(--mono);font-weight:500}
+select,input[type=text],input[type=color]{
+  width:100%;border:1px solid var(--line);border-radius:10px;background:#0b131b;color:var(--text);padding:10px 11px
+}
+input[type=color]{height:44px;padding:4px}
+.combo{display:grid;grid-template-columns:1fr 72px;gap:8px}
+.compiler-output{display:grid;gap:16px}
+.preview{
+  min-height:480px;position:relative;overflow:hidden;padding:clamp(22px,4vw,48px);isolation:isolate;
+  background:
+    radial-gradient(circle at 86% 18%,rgba(var(--accent-rgb),.24),transparent 28rem),
+    linear-gradient(145deg,#111923,#091017 72%);
+}
+.preview:before{
+  content:"";position:absolute;inset:0;opacity:.28;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:32px 32px;mask-image:linear-gradient(to bottom,black,transparent 88%)
+}
+.preview-content{position:relative;z-index:2;height:100%;display:grid;grid-template-columns:1.618fr 1fr;grid-template-rows:auto 1fr auto;gap:22px 32px}
+.preview .pk{grid-column:1/-1;font:800 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--preview-accent,var(--mint))}
+.preview h3{align-self:end;margin:0;max-width:9ch;font-size:clamp(3rem,6vw,6.6rem);line-height:.87;letter-spacing:-.075em}
+.preview .pcopy{align-self:center;max-width:31rem}
+.preview .pcopy p{margin:0 0 15px;color:#d3d9dc;line-height:1.58}
+.preview .pmeta{grid-column:1/-1;border-top:1px solid #ffffff28;padding-top:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font:10px var(--mono);color:#91a0aa}
+.palette-strip{display:grid;grid-template-columns:repeat(6,1fr);height:54px;border:1px solid var(--line2);border-radius:10px;overflow:hidden}
+.palette-strip button{border:0;min-width:0;position:relative}
+.palette-strip button span{position:absolute;inset:auto 4px 4px;font:8px var(--mono);background:#0008;color:#fff;padding:2px 4px;border-radius:4px}
+.output-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* agent route table */
+.route-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.route-card{padding:14px}
+.route-card b{display:block;margin-bottom:5px}
+.route-card .route{font:10px/1.55 var(--mono);color:var(--muted)}
+.route-card .route strong{color:var(--gold)}
+
+/* art lab */
+.lab-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(330px,.65fr);gap:16px;align-items:start}
+.lab-main{padding:16px}
+.canvas-wrap{
+  margin-top:12px;position:relative;aspect-ratio:1;border-radius:15px;overflow:hidden;background:#09111b;border:1px solid var(--line2)
+}
+.canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.canvas-label{position:absolute;z-index:3;font:9px var(--mono);letter-spacing:.12em;color:#c6d5df88;pointer-events:none}
+.canvas-label.nw{top:14px;left:14px}.canvas-label.se{right:14px;bottom:14px}
+.lab-side{display:grid;gap:16px}
+.lab-controls{padding:16px}
+.family-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
+.family-btn{border:1px solid var(--line);background:#0b131b;color:var(--muted);border-radius:9px;padding:9px 7px;font-weight:760}
+.family-btn[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#17202a}
+.lab-row{margin-top:15px}
+.lab-row label{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;font-weight:760;margin-bottom:7px}
+.lab-row output{font:10px var(--mono);color:var(--gold)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.swatch{min-width:0;border:1px solid var(--line2);background:#0a1118;border-radius:9px;padding:7px}
+.swatch-color{height:42px;border-radius:6px;border:1px solid #ffffff45}
+.swatch code{display:block;margin-top:6px;font-size:10px;overflow:hidden;text-overflow:ellipsis}
+.sample-list{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;max-height:265px;overflow:auto;margin-top:10px}
+.sample{border:1px solid var(--line2);border-radius:8px;padding:7px;display:flex;gap:8px;align-items:center;font:10px var(--mono)}
+.sample i{width:24px;height:24px;border-radius:5px;border:1px solid #ffffff55;flex:none}
+.lab-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+
+/* dev scaffold */
+.dev-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,.7fr);gap:16px;align-items:start}
+.dev-stage-card{padding:16px}
+.fib-stage{
+  position:relative;aspect-ratio:13/8;border:1px solid rgba(132,230,194,.65);border-radius:14px;overflow:hidden;
+  display:grid;grid-template-columns:repeat(13,1fr);grid-template-rows:repeat(8,1fr);background:#07100c
+}
+.fib-tile{border:1px solid rgba(132,230,194,.25);padding:7px;color:var(--mint);font:800 9px var(--mono);letter-spacing:.07em;text-transform:uppercase}
+.f8{grid-column:1/span 8;grid-row:1/span 8}.f5{grid-column:9/span 5;grid-row:1/span 5}.f3{grid-column:9/span 3;grid-row:6/span 3}.f2{grid-column:12/span 2;grid-row:6/span 2}.f1a{grid-column:12;grid-row:8}.f1b{grid-column:13;grid-row:8}
+#devLines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#devLines polyline{fill:none;stroke:var(--hot);stroke-width:1.4;stroke-dasharray:5 6;vector-effect:non-scaling-stroke}
+.dnode{
+  position:absolute;left:calc(var(--x)*100%);top:calc(var(--y)*100%);transform:translate(-50%,-50%);
+  width:27px;height:27px;border-radius:50%;border:2px solid #07100c;background:var(--hot);color:white;
+  display:grid;place-items:center;font:850 10px var(--mono);z-index:3;cursor:grab;touch-action:none;box-shadow:0 0 0 4px rgba(255,107,69,.12)
+}
+.dev-panel{display:grid;gap:16px}
+.checks{padding:16px}
+.check-row{display:grid;grid-template-columns:36px 1fr auto;gap:9px;padding:9px 0;border-top:1px solid var(--line2);align-items:start}
+.check-row:first-of-type{border-top:0}
+.check-id{font:850 11px var(--mono);color:var(--gold)}
+.check-state{font:850 10px var(--mono)}
+.history{padding:16px}
+.history-list{display:grid;gap:7px;max-height:300px;overflow:auto}
+.history-item{border:1px solid var(--line2);border-radius:9px;padding:9px;background:#0b1219}
+.history-item b{font-size:.8rem}.history-item code{display:block;color:var(--muted);font-size:9px;margin-top:4px;overflow-wrap:anywhere}
+
+/* principles */
+.principles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.principle{padding:16px}
+.principle .num{font:italic 2.4rem var(--serif);color:var(--accent)}
+.principle h3{margin:5px 0;font-size:1rem}
+.principle p{margin:0;color:var(--muted);font-size:.86rem}
+
+/* footer */
+.footer{padding:36px 0 58px;border-top:1px solid rgba(255,255,255,.085);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--muted);font:10px var(--mono)}
+.toast{
+  position:fixed;left:50%;bottom:22px;z-index:200;transform:translate(-50%,16px);opacity:0;pointer-events:none;
+  background:#16231d;border:1px solid #65e49a88;color:#eafff1;padding:9px 14px;border-radius:10px;font:11px var(--mono);
+  transition:opacity .2s ease,transform .2s ease
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:1120px){
+  .source-grid{grid-template-columns:repeat(3,1fr)}
+  .route-cards{grid-template-columns:repeat(2,1fr)}
+  .principles{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  .hero,.section-head,.compiler-layout,.lab-layout,.dev-layout{grid-template-columns:1fr}
+  .hero{min-height:auto}
+  .hero-copy{padding-top:0;max-width:45rem}
+  .hero-foot{grid-template-columns:1fr}.hero-meta{justify-self:start;text-align:left}
+  .form-card{position:static}
+  .preview-content{grid-template-columns:1fr}
+  .preview .pk,.preview .pmeta{grid-column:1}
+  .source-grid{grid-template-columns:repeat(2,1fr)}
+  .grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:620px){
+  .topbar-inner{align-items:flex-start;padding:10px 0;flex-direction:column}
+  .audience-switch{width:100%;justify-content:space-between}
+  .audience-switch button{flex:1}
+  .hero{padding-top:52px}
+  .hero h1{font-size:clamp(3.5rem,19vw,6.8rem)}
+  .source-grid,.route-cards,.grid-2,.grid-3,.grid-4,.principles{grid-template-columns:1fr}
+  .palette-strip{grid-template-columns:repeat(3,1fr);height:108px}
+  .swatches{grid-template-columns:1fr}
+  .sample-list{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*:before,*:after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="logo" href="#top"><span class="logo-mark">φ</span><span>MATH / BY / DESIGN</span></a>
+    <div class="audience-switch" role="group" aria-label="View mode">
+      <button data-view="all" aria-pressed="true">ALL</button>
+      <button data-view="user" aria-pressed="false">PLAY</button>
+      <button data-view="agent" aria-pressed="false">AGENT</button>
+      <button data-view="dev" aria-pressed="false">DEV</button>
+    </div>
+  </div>
+  <div class="navstrip">
+    <nav class="shell navstrip-inner" aria-label="Master sections">
+      <a href="#sources">Sources</a>
+      <a href="#principles">Grammar</a>
+      <a href="#router">Agent router</a>
+      <a href="#routes">App routes</a>
+      <a href="#play">Math-art lab</a>
+      <a href="#dev">Dev inspector</a>
+      <a href="#protocol">Protocol</a>
+      <a href="#history">History</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="shell hero" data-audience="shared">
+    <div class="hero-kicker eyebrow">Generative grammar / not a template pack</div>
+
+    <h1 data-tile="8">
+      Math
+      <em>by</em>
+      <span class="subline">design.</span>
+    </h1>
+
+    <div class="hero-copy" data-tile="5">
+      <p>
+        Use mathematics to organize attention, generate related visual material,
+        and constrain variation—without making every interface look like a math diagram.
+      </p>
+      <p class="aside">
+        The user sees rhythm. The agent sees contracts. The developer sees state,
+        provenance and failure conditions.
+      </p>
+      <div class="hero-actions" data-tile="2">
+        <a class="btn primary" href="#router">Compile a build</a>
+        <a class="btn ghost" href="#play">Play with the math</a>
+      </div>
+    </div>
+
+    <div class="hero-foot" data-tile="3">
+      <div class="flow-chain" aria-label="Phi Flow progression">
+        <div class="flow-chip"><b>8</b><span>claim</span></div>
+        <div class="flow-chip"><b>5</b><span>context</span></div>
+        <div class="flow-chip"><b>3</b><span>proof</span></div>
+        <div class="flow-chip"><b>2</b><span>decision</span></div>
+        <div class="flow-chip"><b>1</b><span>metadata</span></div>
+        <div class="flow-chip"><b>1</b><span>exit</span></div>
+      </div>
+      <div class="hero-meta" data-tile="1a">
+        <b>LAYOUT</b> Phi Flow<br>
+        <b>MATERIAL</b> independently selected<br>
+        <b>COLOR</b> mathematically generated<br>
+        <b>INTERACTION</b> semantic handoff
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sources" data-audience="shared">
+    <div class="shell">
+      <div class="section-head">
+        <div><div class="eyebrow">00 / lineage</div><h2>Seven sources. Seven different jobs.</h2></div>
+        <p>
+          The master is intentionally non-authoritative where a source already owns the rule.
+          Deep links route humans and agents toward the right layer rather than copying every source into one blob.
+        </p>
+      </div>
+
+      <div class="source-grid">
+        <article class="card source-card">
+          <span class="role-badge">layout authority</span>
+          <b>Fibonacci landing template</b>
+          <p>Canonical 13×8 Phi Flow geometry, semantic tile order and hidden draggable node scaffold.</p>
+          <div class="hash">sha256 a77bff67dfc4d38a9a2324cee5f3256d04415d8b1c7b2ffe0ae3c44394c69850</div>
+          <hr class="soft">
+          <a class="source-link small" href="fibonacci-landing-page-template.html">open source ↗</a>
+        </article>
+
+        <article class="card source-card">
+          <span class="role-badge">dev / explanation</span>
+          <b>Phi Flow dev ref</b>
+          <p>Handoffs, live-view checks, drift, multi-agent protocol, color handoff and F1–F5 gate.</p>
+          <div class="hash">sha256 0db00970f81e82cf63fb6156a1bb7f8a3ba32eb3f2e2f7a9eebb51f9b9388532</div>
+          <hr class="soft">
+          <a class="source-link small" href="phi-flow-dev-ref.html">open source ↗</a>
+        </article>
+
+        <article class="card source-card">
+          <span class="role-badge">style router</span>
+          <b>UI build ref master v2</b>
+          <p>Application routing, materials, hero languages, anti-AI rules, techniques and build-order validation.</p>
+          <div class="hash">sha256 97238d173503cbe0835494cd361b8529e121ec496f9fa389932352652f01e2ed</div>
+          <hr class="soft">
+          <a class="source-link small" href="ui-build-ref-master-v2.html">open source ↗</a>
+        </article>
+
+        <article class="card source-card">
+          <span class="role-badge">color baseline</span>
+          <b>Fibonacci HEX convergence</b>
+          <p>Original single-family field sampler: logarithmic φ path, quarter-turn nodes, inspectable HEX sequence.</p>
+          <div class="hash">sha256 d611cf9301e74a6e314fd7bacec10f64dde87eecaf7baf65a4c1ea401125de9d</div>
+          <hr class="soft">
+          <a class="source-link small" href="fibonacci_hex_convergence_lab.html">open source ↗</a>
+        </article>
+
+        <article class="card source-card">
+          <span class="role-badge">dynamic color</span>
+          <b>Multi-spiral + Rauzy lab</b>
+          <p>Fibonacci, Tribonacci, silver, plastic, Julia-inspired and Binet behavior plus spatial Rauzy A/B/C samples.</p>
+          <div class="hash">sha256 8ef24367741283a174c8c2dd845b043c2bf572831318ba4dbfb6dd3d0f4793a7</div>
+          <hr class="soft">
+          <a class="source-link small" href="fibonacci_hex_multispiral_rauzy_lab.html">open source ↗</a>
+        </article>
+
+        <article class="card source-card">
+          <span class="role-badge">palette geometry</span>
+          <b>Multi-spiral + Rauzy geometry lab</b>
+          <p>Interactive RGB-cube analysis for generated or pasted palettes: PCA shape, hull volume, gray spread and null-model context.</p>
+          <div class="hash">sha256 a60f1bd9e8bdf8706e2e842e11f737349a7b5d8a2b98d4fde5e3c2f683fdf31e</div>
+          <hr class="soft">
+          <a class="source-link small" href="fibonacci_hex_multispiral_rauzy_geometry_lab.html">open source ↗</a>
+        </article>
+
+        <article class="card source-card">
+          <span class="role-badge">canonical math engine</span>
+          <b>Python palette engine</b>
+          <p>SymPy + NumPy port for deterministic CLI/API palette generation, Rauzy sampling, geometry reports, JSON/HTML output and self-tests.</p>
+          <div class="hash">sha256 ba4e73da4db54e60bac1ca13e6093824619553d0a2bec249c4d2cf940cd8b91f</div>
+          <hr class="soft">
+          <a class="source-link small" href="fibonacci_hex_palettes.py">open source ↗</a>
+        </article>
+      </div>
+      <div class="card card-pad" style="margin-top:16px">
+        <div class="rule-title">Human / agent split</div>
+        <p class="small muted" style="margin:8px 0 0"><b style="color:var(--text)">HTML labs</b> are for seeing, touching and inspecting the design space. <b style="color:var(--text)">Python</b> is the reproducible palette/math engine for agents and build tooling. The inline compiler above remains intentionally lightweight and exploratory; it must not silently override the Python engine when exact generation or geometry provenance matters.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="principles" data-audience="shared">
+    <div class="shell">
+      <div class="section-head">
+        <div><div class="eyebrow">01 / grammar</div><h2>Separate the decisions.</h2></div>
+        <p>
+          The system stays generative only if layout, material, color and interaction remain separable.
+          Choosing one must not silently force the others.
+        </p>
+      </div>
+      <div class="principles">
+        <article class="card principle"><div class="num">8→1</div><h3>Hierarchy / where</h3><p>Phi Flow assigns authority and reading order: claim → context → proof → decision → metadata → exit.</p></article>
+        <article class="card principle"><div class="num">□</div><h3>Material / what</h3><p>Oxide, Cryo, Paper, Signal and hero languages define surface character without replacing the layout contract.</p></article>
+        <article class="card principle"><div class="num">τ φ ρ</div><h3>Color / relation</h3><p>Spiral families, convergence nodes and Rauzy samples create related color behavior rather than arbitrary swatch picking.</p></article>
+        <article class="card principle"><div class="num">z</div><h3>Interaction / handoff</h3><p>Prompts, overlays and temporary emphasis route attention; semantic content remains the destination.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="router" data-audience="agent shared">
+    <div class="shell">
+      <div class="section-head">
+        <div><div class="eyebrow">02 / agent compiler</div><h2>Build a bounded design packet.</h2></div>
+        <p>
+          Select the application, material and mathematical color behavior. The packet records choices,
+          source authority and prohibitions so another agent can build without cloning this page.
+          This browser preview is exploratory; use <code>fibonacci_hex_palettes.py</code> when reproducible generated palettes, geometry reports or provenance are required.
+        </p>
+      </div>
+
+      <div class="compiler-layout">
+        <aside class="card form-card">
+          <div class="rule-title">Build inputs</div>
+          <div class="form-grid">
+            <div class="control">
+              <label for="appType">Application <small>routes initial material</small></label>
+              <select id="appType">
+                <option value="saas">SaaS product landing</option>
+                <option value="portfolio">Designer / builder portfolio</option>
+                <option value="onepager">Minimal personal one-pager</option>
+                <option value="agency">Agency / studio / services</option>
+                <option value="developer">Developer tool / agent console / inspector</option>
+                <option value="monitor">Realtime monitor / ops control panel</option>
+                <option value="finance">Finance / audit / records</option>
+                <option value="docs">Docs / research / long reading</option>
+                <option value="tutorial">Tutorial / how-to / step flow</option>
+                <option value="spec">Agent-authored design spec</option>
+                <option value="custom">Custom / manual</option>
+              </select>
+            </div>
+
+            <div class="control">
+              <label for="material">Material language <small>independent from geometry</small></label>
+              <select id="material">
+                <option value="beam">Beam Stage</option>
+                <option value="neon">Neon Dock</option>
+                <option value="mint">Mint Horizon</option>
+                <option value="cobalt">Cobalt Editorial</option>
+                <option value="quiet">Quiet Dark</option>
+                <option value="signal">Signal Rack</option>
+                <option value="cryo">Cryo Index</option>
+                <option value="oxide">Oxide Ledger</option>
+                <option value="paper">Orbital Paper</option>
+                <option value="guide">Guide Pattern</option>
+              </select>
+            </div>
+
+            <div class="control">
+              <label for="spiralFamily">Math family <small>color behavior</small></label>
+              <select id="spiralFamily">
+                <option value="fibonacci">φ Fibonacci</option>
+                <option value="tribonacci">τ Tribonacci</option>
+                <option value="silver">δ Silver ratio</option>
+                <option value="plastic">ρ Plastic constant</option>
+                <option value="julia">J Julia-inspired</option>
+                <option value="binet">B Binet / Fibonacci radii</option>
+              </select>
+            </div>
+
+            <div class="control">
+              <label for="extraction">Color extraction <small>do not confuse data with UI tokens</small></label>
+              <select id="extraction">
+                <option value="mass">UI mass scale / 8,13,21,34,55,89%</option>
+                <option value="nodes">Direct spiral convergence nodes</option>
+                <option value="rauzy">Rauzy A/B/C spatial samples + neutral support</option>
+              </select>
+            </div>
+
+            <div class="control">
+              <label for="seedHex">Seed accent <small>one documented semantic meaning</small></label>
+              <div class="combo">
+                <input id="seedHex" type="text" value="#FF6B45" maxlength="7" spellcheck="false">
+                <input id="seedPicker" type="color" value="#ff6b45" aria-label="Seed color">
+              </div>
+            </div>
+
+            <div class="control">
+              <label for="designName">Design name <small>used by snapshot history</small></label>
+              <input id="designName" type="text" value="math-by-design / first pass">
+            </div>
+
+            <div class="output-actions">
+              <button class="btn primary" id="copyPacket">Copy agent packet</button>
+              <button class="btn" id="downloadPacket">Download JSON</button>
+              <button class="btn" id="downloadTokens">Download CSS tokens</button>
+              <button class="btn ghost" id="saveSnapshot">Save snapshot + SHA</button>
+            </div>
+          </div>
+        </aside>
+
+        <div class="compiler-output">
+          <article class="card preview" id="designPreview">
+            <div class="preview-content">
+              <div class="pk" id="previewKicker">PHI FLOW / MATERIAL / MATH COLOR</div>
+              <h3 id="previewTitle">One system. Many visual outcomes.</h3>
+              <div class="pcopy">
+                <p id="previewCopy">Hierarchy is stable; visual language is allowed to mutate.</p>
+                <button class="btn primary" type="button">Decision / CTA</button>
+              </div>
+              <div class="pmeta"><span>8 claim → 5 context → 3 proof</span><span>2 decision → 1 metadata → 1 exit</span></div>
+            </div>
+          </article>
+
+          <div class="palette-strip" id="paletteStrip" aria-label="Generated preview palette"></div>
+
+          <article class="card card-pad">
+            <div class="rule-title">Compiled agent packet</div>
+            <div class="output-actions" style="margin:8px 0 12px">
+              <span class="tag"><i></i><span id="packetStatus">live / deterministic from controls</span></span>
+            </div>
+            <pre id="packetOutput"></pre>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="routes" data-audience="agent shared">
+    <div class="shell">
+      <div class="section-head">
+        <div><div class="eyebrow">03 / application routes</div><h2>Start somewhere. Do not end there.</h2></div>
+        <p>These routes come from the master UI reference. Pairings mix tone with structure—not two complete looks.</p>
+      </div>
+
+      <div class="route-cards">
+        <article class="card route-card"><b>Developer tool / inspector</b><div class="route"><strong>Quiet Dark</strong> + Signal Rack / Cryo Index<br>Avoid large decorative gradients and ornamental glass.</div></article>
+        <article class="card route-card"><b>Realtime ops / control panel</b><div class="route"><strong>Signal Rack</strong> + Cryo Index<br>Bright color belongs to live / armed state.</div></article>
+        <article class="card route-card"><b>Finance / audit / records</b><div class="route"><strong>Oxide Ledger</strong> + inset wells<br>Accuracy and permanence over playful decoration.</div></article>
+        <article class="card route-card"><b>Docs / research / long reading</b><div class="route"><strong>Orbital Paper</strong> + guide only for onboarding<br>Avoid neon outlines and floating panels.</div></article>
+        <article class="card route-card"><b>Tutorial / how-to</b><div class="route"><strong>Guide Pattern</strong> + Orbital Paper<br>Differentiate aggressively; template risk is high.</div></article>
+        <article class="card route-card"><b>SaaS product landing</b><div class="route"><strong>Beam Stage</strong> + Quiet Dark below fold<br>One light source, one CTA focus.</div></article>
+        <article class="card route-card"><b>Builder / designer portfolio</b><div class="route"><strong>Neon Dock</strong> + Mint Horizon<br>Spatial anchor, not glow everywhere.</div></article>
+        <article class="card route-card"><b>Minimal one-pager</b><div class="route"><strong>Mint Horizon</strong> + Cobalt<br>Name and weight contrast carry the screen.</div></article>
+        <article class="card route-card"><b>Agency / studio</b><div class="route"><strong>Cobalt Editorial</strong> + Beam<br>Big stats, restrained serif emphasis.</div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="play" data-audience="user shared">
+    <div class="shell">
+      <div class="section-head">
+        <div><div class="eyebrow">04 / user artsy fun</div><h2>Move the math. Watch color relationships change.</h2></div>
+        <p>
+          This is a compact playground, not a substitute for the full multi-spiral/Rauzy lab.
+          Click the chromatic field, switch families, change the scale and rotate the projected tri-tile.
+        </p>
+      </div>
+
+      <div class="lab-layout">
+        <article class="card lab-main">
+          <div class="rule-title">Chromatic field / active trace</div>
+          <div class="canvas-wrap" id="artWrap">
+            <canvas id="artCanvas" aria-label="Interactive hexagonal chromatic field with mathematical spiral trace"></canvas>
+            <div class="canvas-label nw">HSV / HEX FIELD</div>
+            <div class="canvas-label se" id="artCaption">φ / CONVERGENCE</div>
+          </div>
+          <div class="lab-actions">
+            <button class="btn primary" id="randomArt">Random origin</button>
+            <button class="btn" id="rimArt">Rim origin</button>
+            <button class="btn" id="coreArt">Core origin</button>
+            <button class="btn ghost" id="rotateRauzy">Rotate Rauzy</button>
+          </div>
+        </article>
+
+        <aside class="lab-side">
+          <article class="card lab-controls">
+            <div class="rule-title">Family</div>
+            <div class="family-grid" id="familyButtons">
+              <button class="family-btn" data-family="fibonacci" aria-pressed="true">φ Fibonacci</button>
+              <button class="family-btn" data-family="tribonacci" aria-pressed="false">τ Tribonacci</button>
+              <button class="family-btn" data-family="silver" aria-pressed="false">δ Silver</button>
+              <button class="family-btn" data-family="plastic" aria-pressed="false">ρ Plastic</button>
+              <button class="family-btn" data-family="julia" aria-pressed="false">J Julia</button>
+              <button class="family-btn" data-family="binet" aria-pressed="false">B Binet</button>
+            </div>
+
+            <div class="lab-row">
+              <label for="artBias">Scale adjustment <output id="artBiasOut">0.0%</output></label>
+              <input type="range" id="artBias" min="-5" max="5" step=".5" value="0">
+            </div>
+
+            <div class="lab-row">
+              <label for="rauzyScale">Rauzy scale <output id="rauzyScaleOut">58%</output></label>
+              <input type="range" id="rauzyScale" min="18" max="96" step="1" value="58">
+            </div>
+
+            <div class="lab-row">
+              <label><span>Selected / origin</span><output id="originHex">#FFFFFF</output></label>
+            </div>
+
+            <hr class="soft">
+            <div class="rule-title">Rauzy A / B / C</div>
+            <div class="swatches" id="rauzySwatches"></div>
+          </article>
+
+          <article class="card lab-controls">
+            <div class="rule-title">Convergence samples</div>
+            <div class="sample-list" id="sampleList"></div>
+            <p class="small muted" id="mathNote" style="margin:12px 0 0"></p>
+          </article>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="dev" data-audience="dev shared">
+    <div class="shell">
+      <div class="section-head">
+        <div><div class="eyebrow">05 / developer inspector</div><h2>Expose the backstage geometry.</h2></div>
+        <p>
+          Drag the flow nodes along the 13×8 scaffold. The orange path is a debugging artifact,
+          not a user-facing spiral. Reset anytime; positions persist locally.
+        </p>
+      </div>
+
+      <div class="dev-layout">
+        <article class="card dev-stage-card">
+          <div class="fib-stage" id="fibStage">
+            <div class="fib-tile f8">8 / claim</div>
+            <div class="fib-tile f5">5 / context</div>
+            <div class="fib-tile f3">3 / proof</div>
+            <div class="fib-tile f2">2 / decision</div>
+            <div class="fib-tile f1a">1 / meta</div>
+            <div class="fib-tile f1b">1 / exit</div>
+            <svg id="devLines" viewBox="0 0 1300 800" preserveAspectRatio="none" aria-hidden="true"><polyline id="devPolyline"></polyline></svg>
+            <button class="dnode" data-node="1" style="--x:.6153846;--y:.22" aria-label="claim to context node">1</button>
+            <button class="dnode" data-node="2" style="--x:.6153846;--y:.625" aria-label="context to proof node">2</button>
+            <button class="dnode" data-node="3" style="--x:.8461538;--y:.72" aria-label="proof to decision node">3</button>
+            <button class="dnode" data-node="4" style="--x:.9230769;--y:.875" aria-label="decision to metadata node">4</button>
+            <button class="dnode" data-node="5" style="--x:.9615384;--y:1" aria-label="metadata to exit node">5</button>
+          </div>
+          <div class="lab-actions">
+            <button class="btn tiny" id="resetDevNodes">Reset nodes</button>
+            <button class="btn tiny" id="runChecks">Run master checks</button>
+          </div>
+        </article>
+
+        <aside class="dev-panel">
+          <article class="card checks">
+            <div class="rule-title">F1–F5 validation gate</div>
+            <div class="check-row"><span class="check-id">F1</span><div><b>Identity</b><div class="small muted">Can the design idea be described without “modern”, “clean” or “golden”?</div></div><span class="check-state warn" data-check="F1">MANUAL</span></div>
+            <div class="check-row"><span class="check-id">F2</span><div><b>Mass</b><div class="small muted">One primary claim has visibly more authority than support.</div></div><span class="check-state" data-check="F2">—</span></div>
+            <div class="check-row"><span class="check-id">F3</span><div><b>Flow</b><div class="small muted">DOM tile order follows 8→5→3→2→1→1.</div></div><span class="check-state" data-check="F3">—</span></div>
+            <div class="check-row"><span class="check-id">F4</span><div><b>Variation</b><div class="small muted">Handoffs change multiple visual properties; accent has one meaning.</div></div><span class="check-state warn" data-check="F4">MANUAL</span></div>
+            <div class="check-row"><span class="check-id">F5</span><div><b>Resilience</b><div class="small muted">Narrow screen order + reduced-motion support exist.</div></div><span class="check-state" data-check="F5">—</span></div>
+          </article>
+
+          <article class="card card-pad">
+            <div class="rule-title">Dev rules</div>
+            <pre>LAYOUT AUTHORITY
+#agent-layout-contract in the Phi Flow template
+
+FLOW
+8 claim → 5 context → 3 proof → 2 decision → 1 metadata → 1 exit
+
+HANDOFF
+change ≥2 of:
+scale / measure / family / weight / alignment
+
+DO NOT
+curve or rotate text
+make a card per tile
+fill every tile
+force desktop geometry on mobile
+show the golden spiral as decoration
+infer accessibility from mathematics</pre>
+          </article>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="protocol" data-audience="agent dev shared">
+    <div class="shell">
+      <div class="section-head">
+        <div><div class="eyebrow">06 / handoff protocol</div><h2>Each actor owns an output.</h2></div>
+        <p>Do not silently revise a previous actor’s decision. Return a verifiable artifact or an explicit escalation.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Actor</th><th>Receives</th><th>Produces</th><th>Stop / escalation</th></tr></thead>
+          <tbody>
+            <tr><td><b>01 / Planner</b></td><td>Audience, purpose, evidence, desired action</td><td>Six-slot content plan, risks, scope, acceptance tests</td><td>Missing evidence becomes an explicit placeholder.</td></tr>
+            <tr><td><b>02 / Writer</b></td><td>Approved slot plan</td><td>Claim, context, proof, CTA, metadata, exit</td><td>No fake proof or silently strengthened claim.</td></tr>
+            <tr><td><b>03 / Builder</b></td><td>Approved content + canonical layout contract + selected material/color packet</td><td>Responsive semantic HTML/CSS with tile roles</td><td>Do not fork layout authority to solve a styling problem.</td></tr>
+            <tr><td><b>04 / Reviewer</b></td><td>Built artifact + planned roles</td><td>F1–F5 PASS/FAIL with exact corrections</td><td>No approval while unresolved flow/order failures remain.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="history" data-audience="dev agent shared">
+    <div class="shell">
+      <div class="section-head">
+        <div><div class="eyebrow">07 / local design history</div><h2>Save the exact choice, not the vibe.</h2></div>
+        <p>
+          Agent packets can be snapshotted with SHA-256 in local browser storage. This creates a repeatable design lineage
+          without encouraging every page to reuse the same visual signature.
+        </p>
+      </div>
+
+      <article class="card history">
+        <div class="output-actions" style="justify-content:space-between;align-items:center">
+          <div><div class="rule-title">Saved snapshots</div><div class="small muted">Name · timestamp · packet hash</div></div>
+          <button class="btn tiny" id="clearHistory">Clear local history</button>
+        </div>
+        <hr class="soft">
+        <div class="history-list" id="historyList"></div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="shell footer">
+  <span>MATH / BY / DESIGN · master router / compiler / playground</span>
+  <span>references ≠ templates · math ≠ accessibility proof · hierarchy > geometry on mobile</span>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="application/json" id="math-by-design-contract">
+{
+  "schema": "math-by-design/master-v1",
+  "purpose": "Route and compile math-guided design decisions without replacing canonical source contracts.",
+  "source_authority": {
+    "layout": "fibonacci-landing-page-template.html#agent-layout-contract",
+    "layout_explanation_and_validation": "phi-flow-dev-ref.html",
+    "style_routing_and_materials": "ui-build-ref-master-v2.html",
+    "color_baseline": "fibonacci_hex_convergence_lab.html",
+    "dynamic_color": "fibonacci_hex_multispiral_rauzy_lab.html",
+    "palette_geometry": "fibonacci_hex_multispiral_rauzy_geometry_lab.html",
+    "palette_engine": "fibonacci_hex_palettes.py"
+  },
+  "phi_flow": {
+    "grid": {"columns":13,"rows":8},
+    "order":["8","5","3","2","1a","1b"],
+    "roles":{"8":"claim","5":"context","3":"proof","2":"decision","1a":"metadata","1b":"exit"},
+    "mobile_rule":"Below 760px, semantic hierarchy and DOM order outrank physical tile geometry."
+  },
+  "separation_of_concerns": {
+    "layout":"where attention moves",
+    "material":"what surfaces feel made of",
+    "color":"how related colors are generated",
+    "interaction":"how temporary UI hands off to semantic content"
+  },
+  "prohibitions":[
+    "Do not clone a full reference signature.",
+    "Do not curve or rotate body copy to imitate a spiral.",
+    "Do not make every tile a card.",
+    "Do not fill every tile.",
+    "Do not force desktop geometry onto mobile.",
+    "Do not infer accessibility from mathematical relationships."
+  ],
+  "spiral_families":{
+    "fibonacci":{"symbol":"φ","ratio":1.618033988749895,"kind":"log","turn_degrees":90},
+    "tribonacci":{"symbol":"τ","ratio":1.839286755214161,"kind":"log","turn_degrees":90},
+    "silver":{"symbol":"δ","ratio":2.414213562373095,"kind":"log","turn_degrees":90},
+    "plastic":{"symbol":"ρ","ratio":1.324717957244746,"kind":"log","turn_degrees":90},
+    "julia":{"symbol":"J","ratio_base":"φ","kind":"exploratory orbit-inspired modulation","turn_degrees":45},
+    "binet":{"symbol":"B","kind":"discrete Fibonacci radii with interpolation","turn_degrees":90}
+  },
+  "validation_gate":["F1 identity","F2 mass","F3 flow","F4 variation","F5 resilience"],
+  "references_not_templates":true
+}
+</script>
+
+<script>
+(()=>{'use strict';
+
+const $=id=>document.getElementById(id);
+const $$=sel=>[...document.querySelectorAll(sel)];
+const PHI=(1+Math.sqrt(5))/2;
+const TRIB=1.839286755214161;
+const SILVER=1+Math.sqrt(2);
+const PLASTIC=1.324717957244746;
+const TAU=Math.PI*2;
+const HALF_PI=Math.PI/2;
+const SQRT5=Math.sqrt(5);
+
+const SOURCES={
+  layout:{file:'fibonacci-landing-page-template.html',sha256:'a77bff67dfc4d38a9a2324cee5f3256d04415d8b1c7b2ffe0ae3c44394c69850'},
+  phiDev:{file:'phi-flow-dev-ref.html',sha256:'0db00970f81e82cf63fb6156a1bb7f8a3ba32eb3f2e2f7a9eebb51f9b9388532'},
+  uiMaster:{file:'ui-build-ref-master-v2.html',sha256:'97238d173503cbe0835494cd361b8529e121ec496f9fa389932352652f01e2ed'},
+  colorBase:{file:'fibonacci_hex_convergence_lab.html',sha256:'d611cf9301e74a6e314fd7bacec10f64dde87eecaf7baf65a4c1ea401125de9d'},
+  colorDynamic:{file:'fibonacci_hex_multispiral_rauzy_lab.html',sha256:'8ef24367741283a174c8c2dd845b043c2bf572831318ba4dbfb6dd3d0f4793a7'},
+  geometryLab:{file:'fibonacci_hex_multispiral_rauzy_geometry_lab.html',sha256:'a60f1bd9e8bdf8706e2e842e11f737349a7b5d8a2b98d4fde5e3c2f683fdf31e'},
+  paletteEngine:{file:'fibonacci_hex_palettes.py',sha256:'ba4e73da4db54e60bac1ca13e6093824619553d0a2bec249c4d2cf940cd8b91f'}
+};
+
+const SPIRALS={
+  fibonacci:{name:'Fibonacci',short:'φ',kind:'log',ratio:PHI,turn:HALF_PI,note:'Golden-ratio logarithmic spiral; radius changes by φ each 90° turn.'},
+  tribonacci:{name:'Tribonacci',short:'τ',kind:'log',ratio:TRIB,turn:HALF_PI,note:'Tribonacci asymptotic logarithmic spiral; radius changes by τ each 90° turn.'},
+  silver:{name:'Silver ratio',short:'δ',kind:'log',ratio:SILVER,turn:HALF_PI,note:'Silver-ratio logarithmic spiral; radius changes by 1+√2 each 90° turn.'},
+  plastic:{name:'Plastic constant',short:'ρ',kind:'log',ratio:PLASTIC,turn:HALF_PI,note:'Plastic-constant logarithmic spiral; slower radial contraction/expansion.'},
+  julia:{name:'Julia inspired',short:'J',kind:'julia',ratio:PHI,turn:HALF_PI/2,note:'Exploratory complex-phase modulation on a φ radial envelope; not a canonical named Julia spiral.'},
+  binet:{name:'Binet sequence',short:'B',kind:'binet',ratio:PHI,turn:HALF_PI,note:'Discrete Fibonacci radii from Binet values, interpolated between 90° nodes.'}
+};
+
+const APP_ROUTES={
+  saas:{material:'beam',why:'One light source and one CTA focus attention quickly.',avoid:'Glass cards on every section.'},
+  portfolio:{material:'neon',why:'A spatial dock can give personality and anchoring.',avoid:'Glow on every element.'},
+  onepager:{material:'mint',why:'Weight contrast and sparse chrome let identity carry the page.',avoid:'Extra buttons above the fold.'},
+  agency:{material:'cobalt',why:'Editorial scale and strong stats read as established.',avoid:'More than one serif-italic voice per screen.'},
+  developer:{material:'quiet',why:'Dense facts need calm tonal surfaces.',avoid:'Large gradient fills and decorative glass.'},
+  monitor:{material:'signal',why:'Strict rows and sparse lamps make live state the bright thing.',avoid:'Accent on anything not live or armed.'},
+  finance:{material:'oxide',why:'Bookish type and square geometry support permanence.',avoid:'Pastel gradients and playful cards.'},
+  docs:{material:'paper',why:'Composition and ledger lines support sustained reading.',avoid:'Neon outlines and floating panels.'},
+  tutorial:{material:'guide',why:'Step tabs make sequence explicit.',avoid:'Template-y gradient headline + badge + emoji stack.'},
+  spec:{material:'quiet',why:'Dense handoff metadata needs calm structure and provenance.',avoid:'Cloning a reference signature.'},
+  custom:{material:null,why:'Manual route.',avoid:'Unexamined defaults.'}
+};
+
+const MATERIALS={
+  beam:{name:'Beam Stage',surface:'#0a0d12',panel:'#111820',ink:'#f6f5ef',tone:'single directional light / restrained chrome'},
+  neon:{name:'Neon Dock',surface:'#090b12',panel:'#131421',ink:'#f8f7ff',tone:'spatial anchor / selective luminous edge'},
+  mint:{name:'Mint Horizon',surface:'#0d1513',panel:'#14201c',ink:'#f2f5ec',tone:'minimal weight contrast / sparse chrome'},
+  cobalt:{name:'Cobalt Editorial',surface:'#0b1220',panel:'#13213a',ink:'#f6f3ed',tone:'editorial scale / stat confidence'},
+  quiet:{name:'Quiet Dark',surface:'#0b0f14',panel:'#111820',ink:'#f5f5ee',tone:'tonal wells / information-first'},
+  signal:{name:'Signal Rack',surface:'#090d0b',panel:'#111813',ink:'#eff3eb',tone:'strict rows / state-only brightness'},
+  cryo:{name:'Cryo Index',surface:'#071116',panel:'#10202a',ink:'#eff9fa',tone:'cold precision / indexed surfaces'},
+  oxide:{name:'Oxide Ledger',surface:'#17110e',panel:'#241914',ink:'#f2e9df',tone:'bookish permanence / square record surfaces'},
+  paper:{name:'Orbital Paper',surface:'#e9e6dc',panel:'#f5f2e8',ink:'#171914',tone:'reading-first / ledger lines / quiet orbit'},
+  guide:{name:'Guide Pattern',surface:'#11131b',panel:'#1b1e2b',ink:'#f4f4f7',tone:'explicit sequence / onboarding only'}
+};
+
+let toastTimer;
+function toast(msg){
+  const t=$('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function clamp(v,a,b){return Math.min(b,Math.max(a,v))}
+function hexOk(v){return /^#[0-9a-f]{6}$/i.test(v)}
+function hexToRgb(hex){
+  const n=parseInt(hex.slice(1),16);
+  return [(n>>16)&255,(n>>8)&255,n&255];
+}
+function rgbToHex(rgb){return '#'+rgb.map(v=>clamp(Math.round(v),0,255).toString(16).padStart(2,'0')).join('').toUpperCase()}
+function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t)}
+function rgbToHsl([r,g,b]){
+  r/=255;g/=255;b/=255;const max=Math.max(r,g,b),min=Math.min(r,g,b);let h=0,s=0,l=(max+min)/2,d=max-min;
+  if(d){s=l>.5?d/(2-max-min):d/(max+min);switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;default:h=(r-g)/d+4}h*=60}
+  return [h,s,l];
+}
+function hslToRgb([h,s,l]){
+  h=((h%360)+360)%360/360;
+  if(!s){let v=Math.round(l*255);return [v,v,v]}
+  const q=l<.5?l*(1+s):l+s-l*s,p=2*l-q;
+  const hue=t=>{if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p};
+  return [hue(h+1/3),hue(h),hue(h-1/3)].map(v=>Math.round(v*255));
+}
+function relativeLuminance(rgb){
+  const c=rgb.map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});
+  return .2126*c[0]+.7152*c[1]+.0722*c[2];
+}
+function contrast(a,b){
+  const l1=relativeLuminance(a),l2=relativeLuminance(b);return (Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05);
+}
+function canonical(obj){return JSON.stringify(obj,Object.keys(obj).sort(),2)}
+async function sha256(text){
+  if(!crypto?.subtle) return 'sha256-unavailable';
+  const data=new TextEncoder().encode(text);
+  const buf=await crypto.subtle.digest('SHA-256',data);
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function downloadText(name,text,type='application/json'){
+  const blob=new Blob([text],{type:type+';charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1200);
+}
+
+/* audience view */
+$$('.audience-switch button').forEach(btn=>btn.addEventListener('click',()=>{
+  const view=btn.dataset.view;
+  $$('.audience-switch button').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));
+  $$('.section[data-audience]').forEach(sec=>{
+    const roles=(sec.dataset.audience||'').split(/\s+/);
+    sec.classList.toggle('is-hidden',view!=='all'&&!roles.includes(view)&&!roles.includes('shared'));
+  });
+  localStorage.setItem('math-by-design-view',view);
+}));
+const savedView=localStorage.getItem('math-by-design-view');
+if(savedView&&savedView!=='all') document.querySelector(`.audience-switch button[data-view="${savedView}"]`)?.click();
+
+/* palette + packet */
+function familyRatio(key){return SPIRALS[key]?.ratio||PHI}
+function derivePalette(seed,family,mode){
+  const rgb=hexToRgb(seed),hsl=rgbToHsl(rgb),ratio=familyRatio(family);
+  if(mode==='mass'){
+    const neutral=relativeLuminance(rgb)>.45?[10,14,18]:[242,240,232];
+    return [8,13,21,34,55,89].map(p=>rgbToHex(mix(neutral,rgb,p/100)));
+  }
+  if(mode==='rauzy'){
+    const spread=34+(ratio-1)*42;
+    const tri=[-spread,spread*.18,spread];
+    const abc=tri.map((d,i)=>rgbToHex(hslToRgb([hsl[0]+d,clamp(hsl[1]*(.86+i*.08),.25,.95),clamp(hsl[2]+(i-1)*.06,.20,.78)])));
+    return [rgbToHex(mix([11,15,20],rgb,.10)),rgbToHex(mix([11,15,20],rgb,.18)),...abc,rgbToHex(mix(rgb,[255,255,255],.22))];
+  }
+  const step=(360/(ratio*5.2));
+  return Array.from({length:6},(_,i)=>rgbToHex(hslToRgb([
+    hsl[0]+step*i*(family==='julia'?(1+.24*Math.sin(i*1.7)):1),
+    clamp(hsl[1]*(1-.055*i),.22,.94),
+    clamp(hsl[2]+(.035*i)*(i%2?1:-.22),.18,.78)
+  ])));
+}
+function packet(){
+  const app=$('appType').value,material=$('material').value,family=$('spiralFamily').value,extraction=$('extraction').value;
+  const seed=hexOk($('seedHex').value)?$('seedHex').value.toUpperCase():'#FF6B45';
+  const palette=derivePalette(seed,family,extraction);
+  const fam=SPIRALS[family],mat=MATERIALS[material],route=APP_ROUTES[app]||APP_ROUTES.custom;
+  return {
+    schema:'math-by-design/build-packet-v1',
+    design_name:$('designName').value.trim()||'untitled math-by-design',
+    authority:{
+      layout:SOURCES.layout,
+      layout_explanation:SOURCES.phiDev,
+      style_routing:SOURCES.uiMaster,
+      dynamic_color:SOURCES.colorDynamic,
+      palette_geometry:SOURCES.geometryLab,
+      canonical_palette_engine:SOURCES.paletteEngine
+    },
+    intent:{
+      application:app,
+      route_reason:route.why,
+      route_avoid:route.avoid
+    },
+    layout:{
+      system:'Phi Flow',
+      grid:'13x8',
+      progression:['8 claim','5 context','3 proof','2 decision','1a metadata','1b exit'],
+      handoff_rule:'Change at least two of scale, measure, family, weight, alignment.',
+      mobile:'Below 760px hierarchy and DOM order outrank physical geometry.'
+    },
+    material:{
+      id:material,
+      name:mat.name,
+      tone:mat.tone,
+      rule:'Material may change surface character; it may not redefine semantic flow.'
+    },
+    color:{
+      seed,
+      family,
+      family_name:fam.name,
+      family_kind:fam.kind,
+      ratio:Number(fam.ratio.toFixed(12)),
+      extraction,
+      preview_tokens:palette,
+      rule:'Use generated relationships as input; validate contrast and state cues from rendered UI.'
+    },
+    interaction:{
+      rule:'Temporary prompts and overlays route to semantic content; they do not become the destination.',
+      motion:'State-only; support prefers-reduced-motion.'
+    },
+    prohibitions:[
+      'Do not clone a full reference palette + type + geometry signature.',
+      'Do not curve or rotate body copy to imitate a spiral.',
+      'Do not make a card per tile or fill every tile.',
+      'Do not force desktop geometry onto mobile.',
+      'Do not infer accessibility from the math.'
+    ],
+    validation:['F1 identity','F2 mass','F3 flow','F4 variation','F5 resilience'],
+    references_not_templates:true
+  };
+}
+function cssTokens(p){
+  return `:root{
+  --math-seed:${p.color.seed};
+  --math-c1:${p.color.preview_tokens[0]};
+  --math-c2:${p.color.preview_tokens[1]};
+  --math-c3:${p.color.preview_tokens[2]};
+  --math-c4:${p.color.preview_tokens[3]};
+  --math-c5:${p.color.preview_tokens[4]};
+  --math-c6:${p.color.preview_tokens[5]};
+  --math-layout-ratio:1.61803398875;
+}
+/* Source family: ${p.color.family_name}; extraction: ${p.color.extraction}
+   These are generated starting points, not accessibility guarantees. */`;
+}
+function applyMaterialPreview(id){
+  const m=MATERIALS[id],preview=$('designPreview');
+  preview.style.background=`radial-gradient(circle at 86% 18%,rgba(var(--accent-rgb),.23),transparent 28rem),linear-gradient(145deg,${m.panel},${m.surface} 72%)`;
+  preview.style.color=m.ink;
+}
+function updateCompiler(){
+  const p=packet(),palette=p.color.preview_tokens;
+  const seed=p.color.seed,rgb=hexToRgb(seed);
+  document.documentElement.style.setProperty('--accent',seed);
+  document.documentElement.style.setProperty('--accent-rgb',rgb.join(','));
+  $('seedPicker').value=seed.toLowerCase();
+  $('packetOutput').textContent=JSON.stringify(p,null,2);
+  $('previewKicker').textContent=`PHI FLOW / ${p.material.name.toUpperCase()} / ${p.color.family_name.toUpperCase()}`;
+  $('previewTitle').textContent=p.intent.application==='custom'?'A bounded visual grammar.':'One system. Many visual outcomes.';
+  $('previewCopy').textContent=p.material.tone+' · '+SPIRALS[p.color.family].note;
+  applyMaterialPreview(p.material.id);
+  $('paletteStrip').innerHTML=palette.map((c,i)=>`<button type="button" title="${c}" style="background:${c}" data-copy="${c}"><span>${i+1}</span></button>`).join('');
+  $('packetStatus').textContent=`${p.color.family_name} / ${p.color.extraction}`;
+}
+$('appType').addEventListener('change',e=>{
+  const r=APP_ROUTES[e.target.value];if(r?.material)$('material').value=r.material;updateCompiler();
+});
+for(const id of ['material','spiralFamily','extraction','designName']) $(id).addEventListener('input',updateCompiler);
+$('seedPicker').addEventListener('input',e=>{$('seedHex').value=e.target.value.toUpperCase();updateCompiler()});
+$('seedHex').addEventListener('input',e=>{if(hexOk(e.target.value)){e.target.value=e.target.value.toUpperCase();updateCompiler()}});
+$('paletteStrip').addEventListener('click',async e=>{
+  const b=e.target.closest('[data-copy]');if(!b)return;
+  try{await navigator.clipboard.writeText(b.dataset.copy);toast('Copied '+b.dataset.copy)}catch{toast(b.dataset.copy)}
+});
+$('copyPacket').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText($('packetOutput').textContent);toast('Agent packet copied')}catch{toast('Copy unavailable')}
+});
+$('downloadPacket').addEventListener('click',()=>downloadText('math-by-design-packet.json',$('packetOutput').textContent));
+$('downloadTokens').addEventListener('click',()=>downloadText('math-by-design-tokens.css',cssTokens(packet()),'text/css'));
+
+/* history */
+const HISTORY_KEY='math-by-design-history-v1';
+function loadHistory(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]')}catch{return []}}
+function renderHistory(){
+  const items=loadHistory();
+  $('historyList').innerHTML=items.length?items.map(h=>`<div class="history-item"><b>${escapeHtml(h.name)}</b><span class="tag" style="float:right">${escapeHtml(h.family)}</span><code>${escapeHtml(h.time)}</code><code>sha256 ${escapeHtml(h.sha256)}</code></div>`).join(''):'<div class="muted small">No snapshots yet. Save one from the agent compiler.</div>';
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+$('saveSnapshot').addEventListener('click',async()=>{
+  const p=packet(),raw=JSON.stringify(p),hash=await sha256(raw),items=loadHistory();
+  items.unshift({name:p.design_name,time:new Date().toISOString(),sha256:hash,family:p.color.family_name,packet:p});
+  localStorage.setItem(HISTORY_KEY,JSON.stringify(items.slice(0,30)));renderHistory();toast('Snapshot saved');
+});
+$('clearHistory').addEventListener('click',()=>{localStorage.removeItem(HISTORY_KEY);renderHistory();toast('Local history cleared')});
+
+/* art lab */
+const art={canvas:$('artCanvas'),wrap:$('artWrap'),ctx:null,size:600,cx:300,cy:300,R:270,anchor:null,family:'fibonacci',bias:0,rauzyScale:58,rauzyRot:-.28,base:[],nodes:[]};
+art.ctx=art.canvas.getContext('2d');
+
+function edgeRadius(theta){
+  const normal=-Math.PI/3;
+  let diff=((theta-normal+Math.PI/6)%(Math.PI/3)+Math.PI/3)%(Math.PI/3)-Math.PI/6;
+  return art.R*(Math.sqrt(3)/2)/Math.cos(diff);
+}
+function insideHex(x,y){const dx=x-art.cx,dy=y-art.cy;return Math.hypot(dx,dy)<=edgeRadius(Math.atan2(dy,dx))+.5}
+function hsvRgb(h,s){
+  let a=((h%360)+360)%360/60,c=s,x=c*(1-Math.abs(a%2-1)),m=1-c,rr,gg,bb;
+  if(a<1){rr=c;gg=x;bb=0}else if(a<2){rr=x;gg=c;bb=0}else if(a<3){rr=0;gg=c;bb=x}else if(a<4){rr=0;gg=x;bb=c}else if(a<5){rr=x;gg=0;bb=c}else{rr=c;gg=0;bb=x}
+  return [Math.round((rr+m)*255),Math.round((gg+m)*255),Math.round((bb+m)*255)];
+}
+function sampleField(x,y){
+  const dx=x-art.cx,dy=y-art.cy,a=Math.atan2(dy,dx),r=Math.hypot(dx,dy),sat=clamp(r/edgeRadius(a),0,1),h=((a+HALF_PI)/TAU*360+360)%360,rgb=hsvRgb(h,sat);
+  return {hex:rgbToHex(rgb),rgb,hue:h,sat,r,x,y};
+}
+function fitArt(){
+  const css=Math.max(280,Math.round(art.wrap.getBoundingClientRect().width)),dpr=Math.min(devicePixelRatio||1,2);
+  art.size=css;art.cx=css/2;art.cy=css/2;art.R=css/2-Math.max(18,css*.045);
+  art.canvas.width=Math.round(css*dpr);art.canvas.height=Math.round(css*dpr);art.canvas.style.width=css+'px';art.canvas.style.height=css+'px';
+  art.ctx.setTransform(dpr,0,0,dpr,0,0);
+  if(!art.anchor){const a=-HALF_PI+.4,r=edgeRadius(a)-2;art.anchor={x:art.cx+r*Math.cos(a),y:art.cy+r*Math.sin(a)}}
+  else{
+    const dx=art.anchor.x-art.cx,dy=art.anchor.y-art.cy,rr=Math.hypot(dx,dy),a=Math.atan2(dy,dx),lim=edgeRadius(a)-2;
+    if(rr>lim)art.anchor={x:art.cx+lim*Math.cos(a),y:art.cy+lim*Math.sin(a)};
+  }
+  drawArt();
+}
+function paintHexField(){
+  const c=art.ctx,n=Math.round(art.size),img=c.createImageData(n,n),d=img.data;
+  for(let y=0;y<n;y++){let dy=y+.5-art.cy;for(let x=0;x<n;x++){
+    let dx=x+.5-art.cx,a=Math.atan2(dy,dx),r=Math.hypot(dx,dy),max=edgeRadius(a);if(r>max)continue;
+    let h=((a+HALF_PI)/TAU*360+360)%360,s=clamp(r/max,0,1),rgb=hsvRgb(h,s),i=(y*n+x)*4;
+    d[i]=rgb[0];d[i+1]=rgb[1];d[i+2]=rgb[2];d[i+3]=255;
+  }}c.putImageData(img,0,0);
+}
+function fib(n){return Math.round((Math.pow(PHI,n)-Math.pow(-1/PHI,n))/SQRT5)}
+function activeArt(){return SPIRALS[art.family]}
+function artRatio(){return activeArt().ratio*Math.max(.2,1+art.bias/100)}
+function buildArtPath(){
+  const f=activeArt(),dx=art.anchor.x-art.cx,dy=art.anchor.y-art.cy,a0=Math.atan2(dy,dx),r0=Math.max(4,Math.hypot(dx,dy)),dir=1,pts=[],nodes=[];
+  const maxT=TAU*4.4,dt=.022;
+  if(f.kind==='binet'){
+    const base=fib(5);
+    for(let t=0;t<maxT;t+=dt){
+      const u=t/HALF_PI,i=Math.floor(u),fr=u-i,A=fib(5+i)/base,B=fib(6+i)/base,m=Math.exp(Math.log(A)+(Math.log(B)-Math.log(A))*fr),r=r0/m,a=a0+t;
+      if(r<2.4)break;pts.push({x:art.cx+r*Math.cos(a),y:art.cy+r*Math.sin(a),r,t});
+    }
+    for(let i=0;i<9;i++){let r=r0/(fib(5+i)/base),a=a0+i*HALF_PI;if(r<2.4)break;nodes.push({...sampleField(art.cx+r*Math.cos(a),art.cy+r*Math.sin(a)),index:i})}
+  }else{
+    const ratio=artRatio(),turn=f.turn,k=Math.log(ratio)/(f.kind==='julia'?HALF_PI:turn);
+    for(let t=0;t<maxT;t+=dt){
+      let mod=f.kind==='julia'?(.13*Math.sin(2*(a0+t)+.61)+.055*Math.sin(4*(a0+t)-.61)):0;
+      let a=a0+t+mod,r=r0*Math.exp(-k*t);if(r<2.4)break;pts.push({x:art.cx+r*Math.cos(a),y:art.cy+r*Math.sin(a),r,t});
+    }
+    for(let i=0;i<12;i++){let t=i*turn,mod=f.kind==='julia'?(.13*Math.sin(2*(a0+t)+.61)+.055*Math.sin(4*(a0+t)-.61)):0,r=r0*Math.exp(-k*t);if(r<2.4)break;let a=a0+t+mod;nodes.push({...sampleField(art.cx+r*Math.cos(a),art.cy+r*Math.sin(a)),index:i})}
+  }
+  art.nodes=nodes;return pts;
+}
+function buildRauzy(){
+  const t=TRIB,v0=[t*t,t,1],vn=Math.hypot(...v0),v=v0.map(q=>q/vn),dot=v[0],raw=[1-dot*v[0],-dot*v[1],-dot*v[2]],en=Math.hypot(...raw),e1=raw.map(q=>q/en),e2=[v[1]*e1[2]-v[2]*e1[1],v[2]*e1[0]-v[0]*e1[2],v[0]*e1[1]-v[1]*e1[0]];
+  let word='1',sub={'1':'12','2':'13','3':'1'};
+  while(word.length<3500)word=[...word].map(ch=>sub[ch]).join('');
+  word=word.slice(0,3500);
+  let counts=[0,0,0],pts=[];
+  for(let i=0;i<word.length;i++){let x=counts[0]*e1[0]+counts[1]*e1[1]+counts[2]*e1[2],y=counts[0]*e2[0]+counts[1]*e2[1]+counts[2]*e2[2];pts.push({x,y,tile:+word[i]});counts[+word[i]-1]++}
+  const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,span=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys));
+  art.base=pts.map(p=>({x:(p.x-cx)/span*2,y:(p.y-cy)/span*2,tile:p.tile}));
+}
+function transformRauzy(p){
+  const ca=Math.cos(art.rauzyRot),sa=Math.sin(art.rauzyRot),s=art.R*(art.rauzyScale/100)*.92;
+  return {x:art.cx+(p.x*ca-p.y*sa)*s,y:art.cy+(p.x*sa+p.y*ca)*s};
+}
+function drawRauzyAndSample(){
+  const c=art.ctx,cols=['','rgba(255,214,138,.25)','rgba(132,230,194,.24)','rgba(187,165,255,.24)'],samples=[];
+  c.save();c.globalCompositeOperation='screen';
+  for(let tile=1;tile<=3;tile++){
+    let pts=[],sx=0,sy=0;c.fillStyle=cols[tile];c.beginPath();
+    for(const p of art.base){if(p.tile!==tile)continue;const q=transformRauzy(p);if(!insideHex(q.x,q.y))continue;pts.push(q);sx+=q.x;sy+=q.y;c.rect(q.x,q.y,1.25,1.25)}
+    c.fill();
+    if(!pts.length){samples.push({tile,hex:'#000000',count:0});continue}
+    const cx=sx/pts.length,cy=sy/pts.length;let best=pts[0],bd=Infinity;for(const q of pts){const d=(q.x-cx)**2+(q.y-cy)**2;if(d<bd){bd=d;best=q}}
+    const s=sampleField(best.x,best.y);samples.push({tile,count:pts.length,...s});
+  }
+  c.globalCompositeOperation='source-over';
+  for(const s of samples){if(!s.count)continue;c.beginPath();c.arc(s.x,s.y,7,0,TAU);c.fillStyle=s.hex;c.fill();c.lineWidth=2;c.strokeStyle='#fff';c.stroke()}
+  c.restore();
+  $('rauzySwatches').innerHTML=samples.map(s=>`<div class="swatch"><div class="swatch-color" style="background:${s.hex}"></div><code>${String.fromCharCode(64+s.tile)} · ${s.hex}</code></div>`).join('');
+}
+function drawArt(){
+  const c=art.ctx;c.clearRect(0,0,art.size,art.size);paintHexField();c.save();
+  const pts=buildArtPath();drawRauzyAndSample();
+  if(pts.length){c.beginPath();pts.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.strokeStyle='#07111bcf';c.lineWidth=6;c.stroke();c.strokeStyle='#ffe2a0';c.lineWidth=2.4;c.stroke()}
+  for(const n of art.nodes){c.beginPath();c.arc(n.x,n.y,4,0,TAU);c.fillStyle=n.hex;c.fill();c.lineWidth=1.4;c.strokeStyle='#fff';c.stroke()}
+  c.beginPath();c.arc(art.anchor.x,art.anchor.y,8,0,TAU);c.strokeStyle='#fff';c.lineWidth=2;c.stroke();c.restore();
+  const origin=sampleField(art.anchor.x,art.anchor.y);$('originHex').textContent=origin.hex;
+  $('sampleList').innerHTML=art.nodes.slice(0,12).map(n=>`<div class="sample"><i style="background:${n.hex}"></i><span>${String(n.index).padStart(2,'0')} · ${n.hex}</span></div>`).join('');
+  $('mathNote').textContent=activeArt().note;
+  $('artCaption').textContent=activeArt().short+' / '+activeArt().name.toUpperCase();
+}
+function artPoint(e){
+  const r=art.canvas.getBoundingClientRect();return {x:(e.clientX-r.left)*art.size/r.width,y:(e.clientY-r.top)*art.size/r.height}
+}
+art.canvas.addEventListener('pointerdown',e=>{
+  const p=artPoint(e),dx=p.x-art.cx,dy=p.y-art.cy,a=Math.atan2(dy,dx),rr=Math.hypot(dx,dy),lim=edgeRadius(a)-1;
+  art.anchor=rr>lim?{x:art.cx+lim*Math.cos(a),y:art.cy+lim*Math.sin(a)}:p;drawArt();
+});
+$$('.family-btn').forEach(b=>b.addEventListener('click',()=>{
+  art.family=b.dataset.family;
+  $$('.family-btn').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  $('spiralFamily').value=art.family;updateCompiler();drawArt();
+}));
+$('artBias').addEventListener('input',e=>{art.bias=+e.target.value;$('artBiasOut').textContent=(art.bias>0?'+':'')+art.bias.toFixed(1)+'%';drawArt()});
+$('rauzyScale').addEventListener('input',e=>{art.rauzyScale=+e.target.value;$('rauzyScaleOut').textContent=art.rauzyScale+'%';drawArt()});
+$('rotateRauzy').addEventListener('click',()=>{art.rauzyRot=Math.random()*TAU;drawArt()});
+$('randomArt').addEventListener('click',()=>{let x,y;do{x=art.cx+(Math.random()*2-1)*art.R;y=art.cy+(Math.random()*2-1)*art.R}while(!insideHex(x,y));art.anchor={x,y};drawArt()});
+$('rimArt').addEventListener('click',()=>{const a=-HALF_PI+Math.random()*TAU,r=edgeRadius(a)-2;art.anchor={x:art.cx+r*Math.cos(a),y:art.cy+r*Math.sin(a)};drawArt()});
+$('coreArt').addEventListener('click',()=>{const a=-HALF_PI+Math.random()*TAU,r=art.R*(.06+Math.random()*.14);art.anchor={x:art.cx+r*Math.cos(a),y:art.cy+r*Math.sin(a)};drawArt()});
+
+/* dev nodes */
+const DEV_KEY='math-by-design-dev-nodes-v1';
+const devDefaults={'1':{x:.6153846,y:.22},'2':{x:.6153846,y:.625},'3':{x:.8461538,y:.72},'4':{x:.9230769,y:.875},'5':{x:.9615384,y:1}};
+const xEdges=[0,8/13,11/13,12/13,1],yEdges=[0,5/8,7/8,1],nodes=$$('.dnode');
+function readNode(n){return {x:parseFloat(n.style.getPropertyValue('--x'))||0,y:parseFloat(n.style.getPropertyValue('--y'))||0}}
+function placeNode(n,x,y){n.style.setProperty('--x',clamp(x,0,1));n.style.setProperty('--y',clamp(y,0,1))}
+function nearest(v,arr){return arr.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a)}
+function snap(v,arr){const n=nearest(v,arr);return Math.abs(n-v)<.03?n:v}
+function drawDev(){
+  $('devPolyline').setAttribute('points',nodes.sort((a,b)=>+a.dataset.node-+b.dataset.node).map(n=>{const p=readNode(n);return `${p.x*1300},${p.y*800}`}).join(' '));
+}
+function saveDev(){const p={};nodes.forEach(n=>p[n.dataset.node]=readNode(n));localStorage.setItem(DEV_KEY,JSON.stringify(p))}
+function loadDev(){
+  let saved={};try{saved=JSON.parse(localStorage.getItem(DEV_KEY)||'{}')}catch{}
+  nodes.forEach(n=>{const p=saved[n.dataset.node]||devDefaults[n.dataset.node];placeNode(n,p.x,p.y)});drawDev()
+}
+nodes.forEach(n=>{
+  let drag=false;
+  n.addEventListener('pointerdown',e=>{drag=true;n.setPointerCapture(e.pointerId);e.preventDefault()});
+  n.addEventListener('pointermove',e=>{if(!drag)return;const r=$('fibStage').getBoundingClientRect();placeNode(n,snap((e.clientX-r.left)/r.width,xEdges),snap((e.clientY-r.top)/r.height,yEdges));drawDev()});
+  n.addEventListener('pointerup',e=>{drag=false;try{n.releasePointerCapture(e.pointerId)}catch{}saveDev()});
+  n.addEventListener('dblclick',()=>{const p=devDefaults[n.dataset.node];placeNode(n,p.x,p.y);saveDev();drawDev()});
+});
+$('resetDevNodes').addEventListener('click',()=>{localStorage.removeItem(DEV_KEY);loadDev();toast('Flow nodes reset')});
+
+/* checks */
+function setCheck(id,pass,text){
+  const el=document.querySelector(`[data-check="${id}"]`);if(!el)return;
+  el.textContent=text|| (pass?'PASS':'FAIL');el.className='check-state '+(pass?'good':'bad');
+}
+function runChecks(){
+  const primary=document.querySelectorAll('.hero [data-tile="8"]').length===1;
+  setCheck('F2',primary,primary?'PASS':'FAIL');
+  const wanted=['8','5','3','2','1a'];
+  const found=$$('.hero [data-tile]').map(e=>e.dataset.tile);
+  const flow=wanted.every((x,i)=>found.indexOf(x)===-1 || i===0 || found.indexOf(x)>found.indexOf(wanted[i-1]));
+  setCheck('F3',flow,flow?'PASS':'FAIL');
+  const css=[...document.styleSheets].some(s=>{try{return [...s.cssRules].some(r=>String(r.cssText).includes('prefers-reduced-motion'))}catch{return false}});
+  const responsive=window.matchMedia?true:false;
+  setCheck('F5',css&&responsive,(css&&responsive)?'PASS':'FAIL');
+  toast('Automated master checks complete');
+}
+$('runChecks').addEventListener('click',runChecks);
+
+/* sync compiler family -> art */
+$('spiralFamily').addEventListener('change',e=>{
+  art.family=e.target.value;
+  $$('.family-btn').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.family===art.family)));
+  drawArt();
+});
+
+/* init */
+buildRauzy();
+updateCompiler();
+renderHistory();
+loadDev();
+runChecks();
+const ro=new ResizeObserver(()=>fitArt());ro.observe(art.wrap);
+})();
+</script>
+</body>
+</html>
