@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/math-by-design-header.svg" alt="Math by Design — use mathematics to organize attention, generate related visual material, and constrain variation without making every interface look like a math diagram." width="100%">
+</p>
+
 # Math by Design
 
 A small agent-facing design grammar for building interfaces from **hierarchy, material, mathematical color relationships, and interaction behavior** without collapsing those decisions into one reusable template.
