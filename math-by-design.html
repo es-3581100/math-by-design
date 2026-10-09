@@ -165,8 +165,11 @@ code,kbd,pre{font-family:var(--mono)}
 .btn.ghost{background:transparent}
 .btn.tiny{padding:6px 9px;font:720 11px var(--mono);border-radius:8px}
 .hero-foot{
-  grid-column:1/-1;display:grid;grid-template-columns:1.618fr 1fr;gap:28px;border-top:1px solid rgba(255,255,255,.11);padding-top:18px
+  grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.618fr) auto minmax(190px,.72fr) auto;gap:18px 24px;align-items:start;
+  border-top:1px solid rgba(255,255,255,.11);padding-top:18px
 }
+.hero-exit{align-self:start;justify-self:end;color:var(--muted);font:750 10px var(--mono);text-decoration:none;border-bottom:1px solid var(--line)}
+.hero-exit:hover,.hero-exit:focus-visible{color:var(--text);border-color:var(--accent);outline:none}
 .flow-chain{display:flex;flex-wrap:wrap;gap:8px}
 .flow-chip{
   display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;border:1px solid var(--line2);border-radius:10px;padding:7px 10px;background:rgba(255,255,255,.02)
@@ -336,7 +339,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   .hero,.section-head,.compiler-layout,.lab-layout,.dev-layout{grid-template-columns:1fr}
   .hero{min-height:auto}
   .hero-copy{padding-top:0;max-width:45rem}
-  .hero-foot{grid-template-columns:1fr}.hero-meta{justify-self:start;text-align:left}
+  .hero-foot{grid-template-columns:1fr}.hero-meta,.hero-exit{justify-self:start;text-align:left}
   .form-card{position:static}
   .preview-content{grid-template-columns:1fr}
   .preview .pk,.preview .pmeta{grid-column:1}
@@ -405,10 +408,6 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         The user sees rhythm. The agent sees contracts. The developer sees state,
         provenance and failure conditions.
       </p>
-      <div class="hero-actions" data-tile="2">
-        <a class="btn primary" href="#router">Compile a build</a>
-        <a class="btn ghost" href="#play">Play with the math</a>
-      </div>
     </div>
 
     <div class="hero-foot" data-tile="3">
@@ -420,12 +419,17 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <div class="flow-chip"><b>1</b><span>metadata</span></div>
         <div class="flow-chip"><b>1</b><span>exit</span></div>
       </div>
+      <div class="hero-actions" data-tile="2">
+        <a class="btn primary" href="#router">Compile a build</a>
+        <a class="btn ghost" href="#play">Play with the math</a>
+      </div>
       <div class="hero-meta" data-tile="1a">
         <b>LAYOUT</b> Phi Flow<br>
         <b>MATERIAL</b> independently selected<br>
         <b>COLOR</b> mathematically generated<br>
         <b>INTERACTION</b> semantic handoff
       </div>
+      <a class="hero-exit" data-tile="1b" href="#sources">source map ↓</a>
     </div>
   </section>
 
@@ -768,12 +772,13 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
         <aside class="dev-panel">
           <article class="card checks">
-            <div class="rule-title">F1–F5 validation gate</div>
+            <div class="rule-title">F1–F6 validation gate</div>
             <div class="check-row"><span class="check-id">F1</span><div><b>Identity</b><div class="small muted">Can the design idea be described without “modern”, “clean” or “golden”?</div></div><span class="check-state warn" data-check="F1">MANUAL</span></div>
             <div class="check-row"><span class="check-id">F2</span><div><b>Mass</b><div class="small muted">One primary claim has visibly more authority than support.</div></div><span class="check-state" data-check="F2">—</span></div>
             <div class="check-row"><span class="check-id">F3</span><div><b>Flow</b><div class="small muted">DOM tile order follows 8→5→3→2→1→1.</div></div><span class="check-state" data-check="F3">—</span></div>
             <div class="check-row"><span class="check-id">F4</span><div><b>Variation</b><div class="small muted">Handoffs change multiple visual properties; accent has one meaning.</div></div><span class="check-state warn" data-check="F4">MANUAL</span></div>
-            <div class="check-row"><span class="check-id">F5</span><div><b>Resilience</b><div class="small muted">Narrow screen order + reduced-motion support exist.</div></div><span class="check-state" data-check="F5">—</span></div>
+            <div class="check-row"><span class="check-id">F5</span><div><b>Resilience</b><div class="small muted">At 375px the semantic tile order remains 8→5→3→2→1→1, and reduced-motion CSS exists.</div></div><span class="check-state" data-check="F5">—</span></div>
+            <div class="check-row"><span class="check-id">F6</span><div><b>Contrast evidence</b><div class="small muted">Every emitted color records contrast vs active surface + ink; any UI/text clamp belongs in adjustments[].</div></div><span class="check-state" data-check="F6">—</span></div>
           </article>
 
           <article class="card card-pad">
@@ -794,6 +799,8 @@ make a card per tile
 fill every tile
 force desktop geometry on mobile
 show the golden spiral as decoration
+turn design provenance (φ / Fibonacci / ratios) into product copy unless the product is actually about the math
+copy a reference accent set instead of deriving from the selected seed
 infer accessibility from mathematics</pre>
           </article>
         </aside>
@@ -852,7 +859,7 @@ infer accessibility from mathematics</pre>
 
 <script type="application/json" id="math-by-design-contract">
 {
-  "schema": "math-by-design/master-v1",
+  "schema": "math-by-design/master-v2",
   "purpose": "Route and compile math-guided design decisions without replacing canonical source contracts.",
   "source_authority": {
     "layout": "fibonacci-landing-page-template.html#agent-layout-contract",
@@ -881,7 +888,9 @@ infer accessibility from mathematics</pre>
     "Do not make every tile a card.",
     "Do not fill every tile.",
     "Do not force desktop geometry onto mobile.",
-    "Do not infer accessibility from mathematical relationships."
+    "Do not infer accessibility from mathematical relationships.",
+    "Derived structure stays latent: do not expose φ, Fibonacci, golden-ratio or similar design provenance as product copy unless the product is actually about that mathematics.",
+    "References supply relationships and constraints, not a recognizable accent-set or full visual signature."
   ],
   "spiral_families":{
     "fibonacci":{"symbol":"φ","ratio":1.618033988749895,"kind":"log","turn_degrees":90},
@@ -891,7 +900,7 @@ infer accessibility from mathematics</pre>
     "julia":{"symbol":"J","ratio_base":"φ","kind":"exploratory orbit-inspired modulation","turn_degrees":45},
     "binet":{"symbol":"B","kind":"discrete Fibonacci radii with interpolation","turn_degrees":90}
   },
-  "validation_gate":["F1 identity","F2 mass","F3 flow","F4 variation","F5 resilience"],
+  "validation_gate":["F1 identity","F2 mass","F3 flow","F4 variation","F5 resilience","F6 contrast evidence"],
   "references_not_templates":true
 }
 </script>
@@ -910,13 +919,13 @@ const HALF_PI=Math.PI/2;
 const SQRT5=Math.sqrt(5);
 
 const SOURCES={
-  layout:{file:'fibonacci-landing-page-template.html',sha256:'a77bff67dfc4d38a9a2324cee5f3256d04415d8b1c7b2ffe0ae3c44394c69850'},
-  phiDev:{file:'phi-flow-dev-ref.html',sha256:'0db00970f81e82cf63fb6156a1bb7f8a3ba32eb3f2e2f7a9eebb51f9b9388532'},
-  uiMaster:{file:'ui-build-ref-master-v2.html',sha256:'97238d173503cbe0835494cd361b8529e121ec496f9fa389932352652f01e2ed'},
-  colorBase:{file:'fibonacci_hex_convergence_lab.html',sha256:'d611cf9301e74a6e314fd7bacec10f64dde87eecaf7baf65a4c1ea401125de9d'},
-  colorDynamic:{file:'fibonacci_hex_multispiral_rauzy_lab.html',sha256:'8ef24367741283a174c8c2dd845b043c2bf572831318ba4dbfb6dd3d0f4793a7'},
-  geometryLab:{file:'fibonacci_hex_multispiral_rauzy_geometry_lab.html',sha256:'a60f1bd9e8bdf8706e2e842e11f737349a7b5d8a2b98d4fde5e3c2f683fdf31e'},
-  paletteEngine:{file:'fibonacci_hex_palettes.py',sha256:'ba4e73da4db54e60bac1ca13e6093824619553d0a2bec249c4d2cf940cd8b91f'}
+  layout:{file:'fibonacci-landing-page-template.html',sha256:'a77bff67dfc4d38a9a2324cee5f3256d04415d8b1c7b2ffe0ae3c44394c69850',hash_status:'carried-forward; source file not present in this review bundle'},
+  phiDev:{file:'phi-flow-dev-ref.html',sha256:'0db00970f81e82cf63fb6156a1bb7f8a3ba32eb3f2e2f7a9eebb51f9b9388532',hash_status:'carried-forward; source file not present in this review bundle'},
+  uiMaster:{file:'ui-build-ref-master-v2.html',sha256:'97238d173503cbe0835494cd361b8529e121ec496f9fa389932352652f01e2ed',hash_status:'carried-forward; source file not present in this review bundle'},
+  colorBase:{file:'fibonacci_hex_convergence_lab.html',sha256:'d611cf9301e74a6e314fd7bacec10f64dde87eecaf7baf65a4c1ea401125de9d',hash_status:'carried-forward; source file not present in this review bundle'},
+  colorDynamic:{file:'fibonacci_hex_multispiral_rauzy_lab.html',sha256:'8ef24367741283a174c8c2dd845b043c2bf572831318ba4dbfb6dd3d0f4793a7',hash_status:'carried-forward; source file not present in this review bundle'},
+  geometryLab:{file:'fibonacci_hex_multispiral_rauzy_geometry_lab.html',sha256:'a60f1bd9e8bdf8706e2e842e11f737349a7b5d8a2b98d4fde5e3c2f683fdf31e',hash_status:'carried-forward; source file not present in this review bundle'},
+  paletteEngine:{file:'fibonacci_hex_palettes.py',sha256:'85374999f414d04e0527654482fe376d30470970e311774eec9544a882e3e8c7',hash_status:'verified against bundled canonical engine'}
 };
 
 const SPIRALS={
@@ -929,17 +938,17 @@ const SPIRALS={
 };
 
 const APP_ROUTES={
-  saas:{material:'beam',why:'One light source and one CTA focus attention quickly.',avoid:'Glass cards on every section.'},
-  portfolio:{material:'neon',why:'A spatial dock can give personality and anchoring.',avoid:'Glow on every element.'},
-  onepager:{material:'mint',why:'Weight contrast and sparse chrome let identity carry the page.',avoid:'Extra buttons above the fold.'},
-  agency:{material:'cobalt',why:'Editorial scale and strong stats read as established.',avoid:'More than one serif-italic voice per screen.'},
-  developer:{material:'quiet',why:'Dense facts need calm tonal surfaces.',avoid:'Large gradient fills and decorative glass.'},
-  monitor:{material:'signal',why:'Strict rows and sparse lamps make live state the bright thing.',avoid:'Accent on anything not live or armed.'},
-  finance:{material:'oxide',why:'Bookish type and square geometry support permanence.',avoid:'Pastel gradients and playful cards.'},
-  docs:{material:'paper',why:'Composition and ledger lines support sustained reading.',avoid:'Neon outlines and floating panels.'},
-  tutorial:{material:'guide',why:'Step tabs make sequence explicit.',avoid:'Template-y gradient headline + badge + emoji stack.'},
-  spec:{material:'quiet',why:'Dense handoff metadata needs calm structure and provenance.',avoid:'Cloning a reference signature.'},
-  custom:{material:null,why:'Manual route.',avoid:'Unexamined defaults.'}
+  saas:{material:'beam',secondary:['quiet'],why:'One light source and one CTA focus attention quickly.',avoid:'Glass cards on every section.'},
+  portfolio:{material:'neon',secondary:['mint'],why:'A spatial dock can give personality and anchoring.',avoid:'Glow on every element.'},
+  onepager:{material:'mint',secondary:['cobalt'],why:'Weight contrast and sparse chrome let identity carry the page.',avoid:'Extra buttons above the fold.'},
+  agency:{material:'cobalt',secondary:['beam'],why:'Editorial scale and strong stats read as established.',avoid:'More than one serif-italic voice per screen.'},
+  developer:{material:'quiet',secondary:['signal','cryo'],why:'Dense facts need calm tonal surfaces.',avoid:'Large gradient fills and decorative glass.'},
+  monitor:{material:'signal',secondary:['cryo'],why:'Strict rows and sparse lamps make live state the bright thing.',avoid:'Accent on anything not live or armed.'},
+  finance:{material:'oxide',secondary:[],why:'Bookish type and square geometry support permanence.',avoid:'Pastel gradients and playful cards.'},
+  docs:{material:'paper',secondary:['guide'],why:'Composition and ledger lines support sustained reading.',avoid:'Neon outlines and floating panels.'},
+  tutorial:{material:'guide',secondary:['paper'],why:'Step tabs make sequence explicit.',avoid:'Template-y gradient headline + badge + emoji stack.'},
+  spec:{material:'quiet',secondary:['signal'],why:'Dense handoff metadata needs calm structure and provenance.',avoid:'Cloning a reference signature.'},
+  custom:{material:null,secondary:[],why:'Manual route.',avoid:'Unexamined defaults.'}
 };
 
 const MATERIALS={
@@ -988,8 +997,7 @@ function contrast(a,b){
   const l1=relativeLuminance(a),l2=relativeLuminance(b);return (Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05);
 }
 function canonical(obj){return JSON.stringify(obj,Object.keys(obj).sort(),2)}
-async function sha256(text){
-  if(!crypto?.subtle) return 'sha256-unavailable';
+async function sha256(text){  if(!crypto?.subtle) return 'sha256-unavailable';
   const data=new TextEncoder().encode(text);
   const buf=await crypto.subtle.digest('SHA-256',data);
   return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -1014,32 +1022,51 @@ if(savedView&&savedView!=='all') document.querySelector(`.audience-switch button
 
 /* palette + packet */
 function familyRatio(key){return SPIRALS[key]?.ratio||PHI}
-function derivePalette(seed,family,mode){
-  const rgb=hexToRgb(seed),hsl=rgbToHsl(rgb),ratio=familyRatio(family);
+function ratioRecord(hex,mat){
+  const rgb=hexToRgb(hex);
+  const surface=Number(contrast(rgb,hexToRgb(mat.surface)).toFixed(2));
+  const ink=Number(contrast(rgb,hexToRgb(mat.ink)).toFixed(2));
+  const role=r=>r>=4.5?'normal-text-ok':r>=3?'large-text-or-ui-boundary-only':'decorative-only-or-adjust-before-semantic-use';
+  return {
+    hex,
+    contrast_vs_surface:surface,
+    contrast_vs_ink:ink,
+    use_on_surface:role(surface),
+    use_against_ink:role(ink)
+  };
+}
+function derivePalette(seed,family,mode,surface='#0B0F14'){
+  const rgb=hexToRgb(seed),hsl=rgbToHsl(rgb),ratio=familyRatio(family),surfaceRgb=hexToRgb(surface);
+  let out;
   if(mode==='mass'){
-    const neutral=relativeLuminance(rgb)>.45?[10,14,18]:[242,240,232];
-    return [8,13,21,34,55,89].map(p=>rgbToHex(mix(neutral,rgb,p/100)));
-  }
-  if(mode==='rauzy'){
+    // Heuristic preview only. The active material supplies the neutral anchor; family does not alter this mass scale.
+    out=[seed,...[13,21,34,55,89].map(p=>rgbToHex(mix(surfaceRgb,rgb,p/100)))];
+  }else if(mode==='rauzy'){
+    // Heuristic preview of A/B/C relationships. Canonical spatial Rauzy sampling lives in fibonacci_hex_palettes.py.
     const spread=34+(ratio-1)*42;
     const tri=[-spread,spread*.18,spread];
     const abc=tri.map((d,i)=>rgbToHex(hslToRgb([hsl[0]+d,clamp(hsl[1]*(.86+i*.08),.25,.95),clamp(hsl[2]+(i-1)*.06,.20,.78)])));
-    return [rgbToHex(mix([11,15,20],rgb,.10)),rgbToHex(mix([11,15,20],rgb,.18)),...abc,rgbToHex(mix(rgb,[255,255,255],.22))];
+    out=[seed,rgbToHex(mix(surfaceRgb,rgb,.18)),...abc,rgbToHex(mix(rgb,[255,255,255],.22))];
+  }else{
+    const step=(360/(ratio*5.2));
+    out=Array.from({length:6},(_,i)=>i===0?seed:rgbToHex(hslToRgb([
+      hsl[0]+step*i*(family==='julia'?(1+.24*Math.sin(i*1.7)):1),
+      clamp(hsl[1]*(1-.055*i),.22,.94),
+      clamp(hsl[2]+(.035*i)*(i%2?1:-.22),.18,.78)
+    ])));
   }
-  const step=(360/(ratio*5.2));
-  return Array.from({length:6},(_,i)=>rgbToHex(hslToRgb([
-    hsl[0]+step*i*(family==='julia'?(1+.24*Math.sin(i*1.7)):1),
-    clamp(hsl[1]*(1-.055*i),.22,.94),
-    clamp(hsl[2]+(.035*i)*(i%2?1:-.22),.18,.78)
-  ])));
+  out[0]=seed; // exact provenance anchor: never mutate token 1 through an HSL round trip.
+  return out;
 }
 function packet(){
   const app=$('appType').value,material=$('material').value,family=$('spiralFamily').value,extraction=$('extraction').value;
   const seed=hexOk($('seedHex').value)?$('seedHex').value.toUpperCase():'#FF6B45';
-  const palette=derivePalette(seed,family,extraction);
   const fam=SPIRALS[family],mat=MATERIALS[material],route=APP_ROUTES[app]||APP_ROUTES.custom;
+  const palette=derivePalette(seed,family,extraction,mat.surface);
+  const secondary=(route.secondary||[]).map(id=>({id,name:MATERIALS[id]?.name||id,tone:MATERIALS[id]?.tone||null}));
+  const tokenEvidence=palette.map((hex,i)=>({token:`math-c${i+1}`,...ratioRecord(hex,mat)}));
   return {
-    schema:'math-by-design/build-packet-v1',
+    schema:'math-by-design/build-packet-v2',
     design_name:$('designName').value.trim()||'untitled math-by-design',
     authority:{
       layout:SOURCES.layout,
@@ -1049,6 +1076,7 @@ function packet(){
       palette_geometry:SOURCES.geometryLab,
       canonical_palette_engine:SOURCES.paletteEngine
     },
+    source_name_policy:'Use repository-canonical filenames only; browser-download suffixes are not source authority.',
     intent:{
       application:app,
       route_reason:route.why,
@@ -1064,38 +1092,51 @@ function packet(){
     material:{
       id:material,
       name:mat.name,
+      surface:mat.surface,
+      panel:mat.panel,
+      ink:mat.ink,
       tone:mat.tone,
+      secondary,
       rule:'Material may change surface character; it may not redefine semantic flow.'
     },
     color:{
       seed,
+      seed_token:'math-c1',
+      tokens_source:'heuristic-preview',
+      canonical_engine:'fibonacci_hex_palettes.py',
+      parity_status:'not asserted; preview and canonical engine are intentionally distinct until a parity adapter is provided',
       family,
       family_name:fam.name,
       family_kind:fam.kind,
+      family_effect:extraction==='mass'?'none in mass preview; family is retained only as provenance':'family scales preview convergence/hue stride; canonical behavior is defined by the Python engine',
       ratio:Number(fam.ratio.toFixed(12)),
       extraction,
       preview_tokens:palette,
-      rule:'Use generated relationships as input; validate contrast and state cues from rendered UI.'
+      tokens:tokenEvidence,
+      rule:'Use generated relationships as input. References supply relationships and constraints, not a recognizable accent set. Validate rendered-state contrast before assigning semantic color roles; tokens below 4.5:1/3:1 are role-limited unless an adjustment is recorded.'
     },
     interaction:{
       rule:'Temporary prompts and overlays route to semantic content; they do not become the destination.',
       motion:'State-only; support prefers-reduced-motion.'
     },
+    adjustments:[],
     prohibitions:[
       'Do not clone a full reference palette + type + geometry signature.',
       'Do not curve or rotate body copy to imitate a spiral.',
       'Do not make a card per tile or fill every tile.',
       'Do not force desktop geometry onto mobile.',
-      'Do not infer accessibility from the math.'
+      'Do not infer accessibility from the math.',
+      'Derived structure stays latent: do not put φ, Fibonacci, golden-ratio or similar design provenance into product copy unless the product is actually about that mathematics.',
+      'Do not copy reference accents; derive from the selected seed and record any accessibility adjustment.'
     ],
-    validation:['F1 identity','F2 mass','F3 flow','F4 variation','F5 resilience'],
+    validation:['F1 identity','F2 mass','F3 flow','F4 variation','F5 resilience','F6 contrast evidence'],
     references_not_templates:true
   };
 }
 function cssTokens(p){
   return `:root{
   --math-seed:${p.color.seed};
-  --math-c1:${p.color.preview_tokens[0]};
+  --math-c1:${p.color.seed};
   --math-c2:${p.color.preview_tokens[1]};
   --math-c3:${p.color.preview_tokens[2]};
   --math-c4:${p.color.preview_tokens[3]};
@@ -1103,8 +1144,9 @@ function cssTokens(p){
   --math-c6:${p.color.preview_tokens[5]};
   --math-layout-ratio:1.61803398875;
 }
-/* Source family: ${p.color.family_name}; extraction: ${p.color.extraction}
-   These are generated starting points, not accessibility guarantees. */`;
+/* Token source: ${p.color.tokens_source}; canonical engine: ${p.color.canonical_engine}
+   Source family: ${p.color.family_name}; extraction: ${p.color.extraction}
+   math-c1 is the exact seed. Generated starting points are not accessibility guarantees. */`;
 }
 function applyMaterialPreview(id){
   const m=MATERIALS[id],preview=$('designPreview');
@@ -1308,19 +1350,42 @@ function setCheck(id,pass,text){
   const el=document.querySelector(`[data-check="${id}"]`);if(!el)return;
   el.textContent=text|| (pass?'PASS':'FAIL');el.className='check-state '+(pass?'good':'bad');
 }
-function runChecks(){
-  const primary=document.querySelectorAll('.hero [data-tile="8"]').length===1;
-  setCheck('F2',primary,primary?'PASS':'FAIL');
-  const wanted=['8','5','3','2','1a'];
-  const found=$$('.hero [data-tile]').map(e=>e.dataset.tile);
-  const flow=wanted.every((x,i)=>found.indexOf(x)===-1 || i===0 || found.indexOf(x)>found.indexOf(wanted[i-1]));
-  setCheck('F3',flow,flow?'PASS':'FAIL');
-  const css=[...document.styleSheets].some(s=>{try{return [...s.cssRules].some(r=>String(r.cssText).includes('prefers-reduced-motion'))}catch{return false}});
-  const responsive=window.matchMedia?true:false;
-  setCheck('F5',css&&responsive,(css&&responsive)?'PASS':'FAIL');
-  toast('Automated master checks complete');
+function checkRootDocument(root){return root?.nodeType===9?root:(root?.ownerDocument||document)}
+function tileOrder(root){return [...root.querySelectorAll('[data-tile]')].map(e=>e.dataset.tile)}
+function canonicalTileOrder(found){
+  const wanted=['8','5','3','2','1a','1b'];
+  return wanted.every(x=>found.filter(v=>v===x).length===1) && wanted.every((x,i)=>found.indexOf(x)===i);
 }
-$('runChecks').addEventListener('click',runChecks);
+function runChecks(root=document){
+  const doc=checkRootDocument(root),view=doc.defaultView||window;
+  const scope=root.querySelector?root:doc;
+  const tiles=[...scope.querySelectorAll('[data-tile]')];
+  const primary=tiles.filter(e=>e.dataset.tile==='8');
+  const support=tiles.filter(e=>e.dataset.tile!=='8');
+  const mass=el=>{const r=el.getBoundingClientRect();const cs=view.getComputedStyle(el);return {area:r.width*r.height,font:parseFloat(cs.fontSize)||0}};
+  const pm=primary.length===1?mass(primary[0]):{area:0,font:0};
+  const sm=support.map(mass);
+  const maxArea=Math.max(0,...sm.map(x=>x.area)),maxFont=Math.max(0,...sm.map(x=>x.font));
+  const f2=primary.length===1 && (pm.area>=maxArea*1.15 || pm.font>=maxFont*1.20);
+  setCheck('F2',f2,f2?'PASS':'FAIL');
+
+  const found=tileOrder(scope);
+  const f3=canonicalTileOrder(found);
+  setCheck('F3',f3,f3?'PASS':'FAIL');
+
+  const hasReducedMotion=[...doc.styleSheets].some(sheet=>{try{return [...sheet.cssRules].some(r=>String(r.cssText).includes('prefers-reduced-motion'))}catch{return false}});
+  const narrowRule=[...doc.styleSheets].some(sheet=>{try{return [...sheet.cssRules].some(r=>{const t=String(r.cssText);return /@media[^\{]*(max-width:\s*(?:760|620|900)px)/i.test(t)})}catch{return false}});
+  // DOM order is viewport-independent; narrowRule proves a real narrow-screen branch exists rather than merely detecting matchMedia.
+  const f5=f3&&hasReducedMotion&&narrowRule;
+  setCheck('F5',f5,f5?'PASS':'FAIL');
+
+  const p=packet();
+  const evidence=p.color.tokens.every(t=>Number.isFinite(t.contrast_vs_surface)&&Number.isFinite(t.contrast_vs_ink)&&t.use_on_surface&&t.use_against_ink)&&Array.isArray(p.adjustments);
+  setCheck('F6',evidence,evidence?'RECORDED':'FAIL');
+  toast(root===document?'Automated master checks complete':'Automated target checks complete');
+  return {F2:f2,F3:f3,F5:f5,F6:evidence,tiles:found};
+}
+$('runChecks').addEventListener('click',()=>runChecks(document));
 
 /* sync compiler family -> art */
 $('spiralFamily').addEventListener('change',e=>{
