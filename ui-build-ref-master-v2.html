@@ -37,6 +37,7 @@ iframe{display:block;width:100%;height:900px;border:1px solid var(--line);border
     2: "Take tokens and CSS from that section. One accent, one documented meaning."
     3: "Apply rules (#rules) before adding any effect. Do not clone a full palette + type + geometry signature."
     4: "Run the validation gate (#build-order) before expanding visuals."
+    5: "Framework CSS compatibility: never use an unlayered global link-color reset that can override component or utility colors. Prefer a:not([class]) for unstyled-link inheritance, or place resets in @layer base; verify link and CTA contrast after utilities are applied."
   sections:
     agent-index: "this block"
     routes: "application type → style table with pairings and cautions"
@@ -108,7 +109,7 @@ body{margin:0;font-family:var(--sans);background:
   var(--shell-bg);
   background-size:40px 40px,40px 40px,auto;
 }
-a{color:inherit}
+a:not([class]){color:inherit}
 button,input{font:inherit}
 ::selection{background:var(--shell-hot);color:#0c1008}
 
@@ -935,7 +936,7 @@ button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
       line-height: 1.55;
     }
 
-    a { color: inherit; }
+    a:not([class]){color:inherit}
     button, a { -webkit-tap-highlight-color: transparent; }
     button { font: inherit; }
 
