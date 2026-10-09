@@ -65,6 +65,7 @@ HALF_PI = math.pi / 2
 DEFAULT_R_PX = 273.0       # hexagon circumradius on the HTML's 600-px canvas
 MIN_RADIUS_PX = 2.4        # spiral stops once it shrinks below this
 MIN_ANCHOR_PX = 4.0        # smallest allowed start radius
+DEFAULT_DELTA_E_STOP = 12.0  # CIE76 UI-distinctness cutoff; configurable with --delta-e-stop
 EDGE_TOL_PX = 0.3          # outward nodes may overshoot the rim by this much
 AUTO_IN_THRESHOLD = 0.74   # start in outer 26% of the radius -> spiral inward
 VALUE_FLOOR = 0.10         # HTML brightness slider minimum
@@ -254,6 +255,38 @@ def parse_hex(text: str) -> tuple[int, int, int]:
     return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
 
 
+
+def rgb_to_lab(rgb: Sequence[int]) -> np.ndarray:
+    """sRGB (0..255) -> CIE L*a*b* (D65), for perceptual convergence checks."""
+    x = np.asarray(rgb, dtype=float) / 255.0
+    x = np.where(x <= 0.04045, x / 12.92, ((x + 0.055) / 1.055) ** 2.4)
+    X, Y, Z = np.array([
+        0.4124564 * x[0] + 0.3575761 * x[1] + 0.1804375 * x[2],
+        0.2126729 * x[0] + 0.7151522 * x[1] + 0.0721750 * x[2],
+        0.0193339 * x[0] + 0.1191920 * x[1] + 0.9503041 * x[2],
+    ]) / np.array([0.95047, 1.0, 1.08883])
+    eps, kappa = 216 / 24389, 24389 / 27
+    f = lambda t: t ** (1 / 3) if t > eps else (kappa * t + 16) / 116
+    fx, fy, fz = f(X), f(Y), f(Z)
+    return np.array([116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)])
+
+
+def delta_e76(a: Sequence[int], b: Sequence[int]) -> float:
+    """CIE76 ΔE. Used only to decide when further convergence nodes stop adding useful separation."""
+    return float(np.linalg.norm(rgb_to_lab(a) - rgb_to_lab(b)))
+
+
+def usable_swatch_prefix(swatches: Sequence["Swatch"], threshold: float = DEFAULT_DELTA_E_STOP) -> tuple[int, list[float]]:
+    """Return count before first adjacent ΔE<threshold, plus all adjacent ΔE values measured."""
+    if len(swatches) < 2:
+        return len(swatches), []
+    deltas = [delta_e76(swatches[i - 1].rgb, swatches[i].rgb) for i in range(1, len(swatches))]
+    for i, de in enumerate(deltas, start=1):
+        if de < threshold:
+            return i, deltas
+    return len(swatches), deltas
+
+
 def parse_hex_list(text: str, limit: int = 40) -> list[str]:
     """Pull #RRGGBB / #RGB / bare RRGGBB colours out of arbitrary text."""
     out, seen = [], set()
@@ -391,19 +424,30 @@ def _node_label(fam: Family, i: int, t: float) -> str:
 
 
 def spiral_palette(fam: Family, seed: Seed, direction: str, bias_pct: float = 0.0,
-                   count: int | None = None) -> Palette:
+                   count: int | None = None, delta_e_stop: float = DEFAULT_DELTA_E_STOP) -> Palette:
     nd = spiral_nodes(fam, seed, direction, bias_pct)
-    n = len(nd["index"]) if count is None else min(count, len(nd["index"]))
-    sw = [Swatch(hex_of(nd["rgb"][j]), tuple(int(c) for c in nd["rgb"][j]),
-                 _node_label(fam, int(nd["index"][j]), float(nd["t"][j])),
-                 float(nd["r"][j]), float(nd["hue"][j]), float(nd["sat"][j])) for j in range(n)]
+    raw = [Swatch(hex_of(nd["rgb"][j]), tuple(int(c) for c in nd["rgb"][j]),
+                  _node_label(fam, int(nd["index"][j]), float(nd["t"][j])),
+                  float(nd["r"][j]), float(nd["hue"][j]), float(nd["sat"][j]))
+           for j in range(len(nd["index"]))]
+    usable_n, deltas = usable_swatch_prefix(raw, delta_e_stop)
+    if count is not None:
+        usable_n = min(usable_n, count)
+    sw = raw[:usable_n]
     arrow = "inward · edge → core" if direction == "in" else "outward · core → edge"
     ratio_txt = (f"{fam.symbol} = {nd['ratio']:.10f}" if fam.kind != "julia"
                  else f"J / φ = {nd['ratio']:.10f}")
+    family_effect = ("90° hue-node skeleton shared by φ/τ/δ/ρ; the ratio changes radial/chroma convergence rate."
+                     if fam.kind == "log" else
+                     "Julia changes node phase/turn behavior." if fam.kind == "julia" else
+                     "Binet uses discrete Fibonacci radii with interpolation.")
     return Palette(fam.key, f"{fam.symbol}  {fam.name} — {arrow}", "spiral", fam.blurb, sw, direction,
                    {"ratio": nd["ratio"], "trace_length_px": nd["length"], "total_nodes": len(nd["index"]),
+                    "usable_nodes": usable_n, "delta_e_stop": float(delta_e_stop),
+                    "adjacent_delta_e": [float(x) for x in deltas],
+                    "stopped_for_delta_e": usable_n < len(raw) and (count is None or usable_n < count),
+                    "family_effect": family_effect,
                     "ratio_label": ratio_txt, "turn_deg": math.degrees(fam.turn)})
-
 
 # ==========================================================================
 # 4.  Rauzy tri-tile
@@ -655,21 +699,37 @@ def generate_palettes(hex_color: str, *, families: Sequence[str] | None = None, 
                       bias_pct: float = 0.0, value: float | None = None, count: int | None = None,
                       radius_px: float = DEFAULT_R_PX, rauzy: bool = True, rauzy_scale: float = 58.0,
                       rauzy_rotation: float = -0.28, rauzy_spin: int = 1, geometry: bool = True,
-                      baselines: bool = True) -> tuple[Seed, list[Palette]]:
-    """HEX -> (seed info, list of Palette).  direction: both (default) | auto | in | out."""
+                      baselines: bool = True, delta_e_stop: float = DEFAULT_DELTA_E_STOP) -> tuple[Seed, list[Palette]]:
+    """HEX -> (seed info, palettes). Auto chooses the direction with more usable ΔE-separated nodes."""
     seed = make_seed(hex_color, value, radius_px)
     keys = list(FAMILIES) if not families or "all" in families else list(families)
     for k in keys:
         if k not in FAMILIES:
             raise ValueError(f"unknown family {k!r}; choose from {', '.join(FAMILIES)}")
-    dirs = {"auto": [seed.auto_direction], "both": ["in", "out"]}.get(direction, [direction])
 
     palettes: list[Palette] = []
     for k in keys:
-        for d in dirs:
-            pal = spiral_palette(FAMILIES[k], seed, d, bias_pct, count)
-            pal.meta["html_auto_pick"] = (d == seed.auto_direction)
+        fam = FAMILIES[k]
+        if direction == "auto":
+            candidates = {d: spiral_palette(fam, seed, d, bias_pct, count, delta_e_stop) for d in ("in", "out")}
+            # Maximise perceptually useful nodes; use the legacy position heuristic only as the tie-breaker.
+            preferred = seed.auto_direction
+            chosen = max(("in", "out"), key=lambda d: (candidates[d].meta["usable_nodes"], d == preferred))
+            pal = candidates[chosen]
+            pal.meta["auto_pick"] = True
+            pal.meta["auto_reason"] = {
+                "rule": "more usable ΔE-separated nodes; legacy wheel-position heuristic breaks ties",
+                "in_usable_nodes": candidates["in"].meta["usable_nodes"],
+                "out_usable_nodes": candidates["out"].meta["usable_nodes"],
+                "legacy_tiebreak": preferred,
+            }
             palettes.append(pal)
+        else:
+            dirs = ["in", "out"] if direction == "both" else [direction]
+            for d in dirs:
+                pal = spiral_palette(fam, seed, d, bias_pct, count, delta_e_stop)
+                pal.meta["legacy_position_pick"] = (d == seed.auto_direction)
+                palettes.append(pal)
     if rauzy:
         spin = max(1, int(rauzy_spin))
         for centred in (True, False):
@@ -681,7 +741,6 @@ def generate_palettes(hex_color: str, *, families: Sequence[str] | None = None, 
         for p in palettes:
             p.geometry = geometry_report([s.rgb for s in p.swatches], seed.value_used, baselines)
     return seed, palettes
-
 
 # ==========================================================================
 # 7.  Output
@@ -698,16 +757,18 @@ def render_text(seed: Seed, palettes: list[Palette], color: bool = True, geometr
              f"   HSV {seed.hue:.1f}° · {seed.sat:.0%} · {seed.value_in:.0%}")
     L.append(f" Wheel    hue {seed.hue:.1f}° → θ = {math.degrees(seed.theta):.1f}° · r = {seed.r_px:.1f} px of "
              f"{seed.edge_px:.1f} px edge ({seed.r_px / seed.edge_px:.0%}) · brightness {seed.value_used:.0%}")
-    L.append(f" Auto     {'INWARD (edge → core)' if seed.auto_direction == 'in' else 'OUTWARD (core → edge)'}"
-             f" — the outer 26% of the radius spirals inward, the rest outward")
+    L.append(f" Legacy   {'INWARD (edge → core)' if seed.auto_direction == 'in' else 'OUTWARD (core → edge)'}"
+             f" — wheel-position tie-break only; --direction auto now prefers more usable ΔE-separated nodes")
+    L.append(" Family   φ / τ / δ / ρ share the same 90° hue-node skeleton; their ratio changes radial/chroma convergence, not the hue scheme.")
     for n in seed.notes:
         L.append(f" Note     {n}")
     for i, p in enumerate(palettes, 1):
-        star = "  ★ HTML auto pick" if p.meta.get("html_auto_pick") else ""
+        star = "  ★ AUTO" if p.meta.get("auto_pick") else ("  · legacy position pick" if p.meta.get("legacy_position_pick") else "")
         L += ["", f"── {i:02d}  {p.title}{star} " + "─" * max(2, 68 - len(p.title) - len(star))]
         if p.kind == "spiral":
-            L.append(f"   {p.meta['ratio_label']}  ·  {len(p.swatches)} of {p.meta['total_nodes']} nodes  ·  "
-                     f"trace {p.meta['trace_length_px']:.0f} px")
+            L.append(f"   {p.meta['ratio_label']}  ·  usable {p.meta['usable_nodes']} / raw {p.meta['total_nodes']} nodes  ·  "
+                     f"ΔE stop {p.meta['delta_e_stop']:.1f}  · trace {p.meta['trace_length_px']:.0f} px")
+            L.append(f"   family effect: {p.meta['family_effect']}")
         else:
             L.append(f"   scale {p.meta['scale_pct']:g}% · rotation {math.degrees(p.meta['rotation_rad']):.1f}°")
         for j, s in enumerate(p.swatches):
@@ -741,6 +802,11 @@ def to_json(seed: Seed, palettes: list[Palette]) -> dict:
             return o.item()
         return o
     return clean({
+        "engine_notes": {
+            "canonical": True,
+            "family_semantics": "φ/τ/δ/ρ share the 90-degree hue-node skeleton; ratio changes radial/chroma convergence rate.",
+            "usable_nodes": "Spiral palettes stop before the first adjacent CIE76 ΔE below the configured threshold."
+        },
         "seed": {"hex": seed.hex, "rgb": seed.rgb, "hue": seed.hue, "saturation": seed.sat,
                  "value_in": seed.value_in, "value_used": seed.value_used, "theta_rad": seed.theta,
                  "r_px": seed.r_px, "edge_px": seed.edge_px, "auto_direction": seed.auto_direction,
@@ -841,6 +907,11 @@ def self_test() -> bool:
     check("HEX-list parser finds 5 colours incl. expanded #abc", len(pl) == 5 and "#AABBCC" in pl)
     seed, pals = generate_palettes("#5CF2B2", direction="both", baselines=False)
     check("generate_palettes: 6 families × 2 directions + 2 Rauzy palettes", len(pals) == 14)
+    check("spiral palettes report usable_nodes and ΔE threshold",
+          all(p.kind != "spiral" or ("usable_nodes" in p.meta and p.meta["usable_nodes"] <= p.meta["total_nodes"]) for p in pals))
+    _, auto_pals = generate_palettes("#FF6B45", families=["fibonacci"], direction="auto", rauzy=False, geometry=False)
+    check("auto direction prefers the branch with more usable nodes",
+          len(auto_pals) == 1 and auto_pals[0].meta.get("auto_pick") and auto_pals[0].meta["usable_nodes"] >= 2)
     print("ALL PASS" if ok else "SOME CHECKS FAILED")
     return ok
 
@@ -856,9 +927,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--families", nargs="+", default=["all"], metavar="F",
                     help="subset of: " + " ".join(FAMILIES))
     ap.add_argument("--direction", choices=["auto", "in", "out", "both"], default="both",
-                    help="both = inward AND outward palettes; auto = only the HTML's pick (inward when the "
-                         "colour is in the outer 26%% of the wheel radius, else outward)")
-    ap.add_argument("--count", type=int, help="keep only the first N nodes of each spiral palette")
+                    help="both = inward AND outward palettes; auto = choose the direction with more usable ΔE-separated nodes "
+                         "(legacy wheel-position heuristic breaks ties)")
+    ap.add_argument("--count", type=int, help="cap each spiral palette after perceptual usable-node truncation")
+    ap.add_argument("--delta-e-stop", type=float, default=DEFAULT_DELTA_E_STOP,
+                    help="stop before the first adjacent convergence node with CIE76 ΔE below this threshold")
     ap.add_argument("--bias", type=float, default=0.0, help="scale adjustment in %% (HTML range −5…+5)")
     ap.add_argument("--value", type=float, help="wheel brightness 0–1 (default: your colour's own HSV value)")
     ap.add_argument("--radius", type=float, default=DEFAULT_R_PX, help="wheel hexagon circumradius in px")
@@ -912,7 +985,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         seed, pals = generate_palettes(
             hex_in, families=a.families, direction=a.direction, bias_pct=a.bias, value=a.value, count=a.count,
             radius_px=a.radius, rauzy=not a.no_rauzy, rauzy_scale=a.rauzy_scale, rauzy_rotation=a.rauzy_rotation,
-            rauzy_spin=a.rauzy_spin, geometry=not a.no_geometry, baselines=not a.no_baselines)
+            rauzy_spin=a.rauzy_spin, geometry=not a.no_geometry, baselines=not a.no_baselines,
+            delta_e_stop=a.delta_e_stop)
     except ValueError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
@@ -923,8 +997,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"wrote {a.json}")
     if a.html:
         with open(a.html, "w", encoding="utf-8") as fh:
-            fh.write(to_html(seed, pals))
-        print(f"wrote {a.html}")
+            fh.write(to_html(seed, pals))        print(f"wrote {a.html}")
     return 0
 
 
