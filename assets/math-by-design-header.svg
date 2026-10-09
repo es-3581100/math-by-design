@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1275" height="381" viewBox="0 0 1275 381" role="img" aria-labelledby="title desc">
+  <title id="title">Math by design</title>
+  <desc id="desc">Math by Design header: use mathematics to organize attention, generate related visual material, and constrain variation without making every interface look like a math diagram.</desc>
+  <rect width="1275" height="381" fill="#0b1117"/>
+
+  <text x="62" y="151"
+        fill="#f3f4ef"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="162"
+        font-weight="700"
+        letter-spacing="-8">Math</text>
+
+  <text x="141" y="278"
+        fill="#7ce8c8"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="150"
+        font-style="italic"
+        letter-spacing="-6">by</text>
+
+  <text x="72" y="350"
+        fill="#d5dbe0"
+        font-family="'Courier New', Courier, monospace"
+        font-size="74"
+        font-weight="700"
+        letter-spacing="-5">design.</text>
+
+  <g fill="#fffdf6"
+     font-family="'Courier New', Courier, monospace"
+     font-size="23"
+     font-weight="600">
+    <text x="824" y="110">Use mathematics to organize</text>
+    <text x="824" y="145">attention, generate related</text>
+    <text x="824" y="180">visual material, and constrain</text>
+    <text x="824" y="215">variation—without making every</text>
+    <text x="824" y="250">interface look like a math</text>
+    <text x="824" y="285">diagram.</text>
+  </g>
+
+  <g fill="#9fb0bf"
+     font-family="Georgia, 'Times New Roman', serif"
+     font-size="16"
+     font-style="italic">
+    <text x="874" y="330">The user sees rhythm. The agent sees contracts. The</text>
+    <text x="874" y="355">developer sees state, provenance and failure conditions.</text>
+  </g>
+</svg>
