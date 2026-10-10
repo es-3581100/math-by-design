@@ -997,7 +997,8 @@ def _mode_causality_catalog(thesis: np.ndarray) -> FontCatalog:
 
 
 def run_self_tests() -> dict:
-    blueline = ProjectThesis(        label="instrument lettering crossed with scientific editorial",
+    blueline = ProjectThesis(
+        label="instrument lettering crossed with scientific editorial",
         vector=np.array([0.85, 0.55, 0.15, 0.75, 0.10, 0.05]),
     )
 
