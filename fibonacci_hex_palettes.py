@@ -997,7 +997,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"wrote {a.json}")
     if a.html:
         with open(a.html, "w", encoding="utf-8") as fh:
-            fh.write(to_html(seed, pals))        print(f"wrote {a.html}")
+            fh.write(to_html(seed, pals))
+        print(f"wrote {a.html}")
     return 0
 
 
