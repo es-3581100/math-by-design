@@ -22,8 +22,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install Python dependencies
+        run: python -m pip install numpy sympy
+      - name: Compile Python engines
+        run: python -m py_compile fibonacci_hex_palettes.py palette_parity_test.py typography_engine.py typography_engine_smoke_test.py
+      - name: Palette engine self-test
+        run: python fibonacci_hex_palettes.py --self-test
+      - name: Browser/palette parity smoke
+        run: python palette_parity_test.py
+      - name: Typography engine self-test
+        run: python typography_engine.py --self-test
+      - name: Typography integration smoke
+        run: python typography_engine_smoke_test.py
+
   deploy:
+    needs: test
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

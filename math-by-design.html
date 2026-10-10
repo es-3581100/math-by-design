@@ -32,6 +32,8 @@ SOURCE ROLES
    interactive RGB-cube palette geometry, PCA shape, hull/null-model inspection
 7. fibonacci_hex_palettes.py
    canonical reproducible agent/build engine for palette generation + geometry reports
+8. typography_engine.py
+   canonical causal typography engine for job/genome derivation, relationship-aware font-system selection and realized validation
 
 NON-NEGOTIABLE
 --------------
@@ -40,6 +42,7 @@ NON-NEGOTIABLE
 - Phi Flow decides WHERE / hierarchy.
 - Material language decides WHAT IT FEELS MADE OF.
 - Mathematical color behavior decides HOW COLOR RELATIONSHIPS ARE GENERATED.
+- Typography decides HOW TEXT ROLES RELATE and WHICH FONT SYSTEM REALIZES THEM.
 - Interaction layers decide HOW TEMPORARY UI HANDS OFF TO SEMANTIC CONTENT.
 - Accessibility is validated from rendered behavior, never inferred from math.
 - On narrow screens, hierarchy outranks preserving desktop geometry.
@@ -315,7 +318,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .history-item b{font-size:.8rem}.history-item code{display:block;color:var(--muted);font-size:9px;margin-top:4px;overflow-wrap:anywhere}
 
 /* principles */
-.principles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.principles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .principle{padding:16px}
 .principle .num{font:italic 2.4rem var(--serif);color:var(--accent)}
 .principle h3{margin:5px 0;font-size:1rem}
@@ -436,7 +439,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   <section class="section" id="sources" data-audience="shared">
     <div class="shell">
       <div class="section-head">
-        <div><div class="eyebrow">00 / lineage</div><h2>Seven sources. Seven different jobs.</h2></div>
+        <div><div class="eyebrow">00 / lineage</div><h2>Eight sources. Eight different jobs.</h2></div>
         <p>
           The master is intentionally non-authoritative where a source already owns the rule.
           Deep links route humans and agents toward the right layer rather than copying every source into one blob.
@@ -506,10 +509,19 @@ input[type=range]{width:100%;accent-color:var(--accent)}
           <hr class="soft">
           <a class="source-link small" href="fibonacci_hex_palettes.py">open source ↗</a>
         </article>
+
+        <article class="card source-card">
+          <span class="role-badge">canonical type engine</span>
+          <b>Python typography engine</b>
+          <p>NumPy + SymPy engine for semantic type jobs, typography genomes, causal pairing modes, thesis-responsive hierarchy and realized-system validation.</p>
+          <div class="hash">sha256 8bace508896190caee077b144f324a3d0584294c458822c768708fc7db364d1e</div>
+          <hr class="soft">
+          <a class="source-link small" href="typography_engine.py">open source ↗</a>
+        </article>
       </div>
       <div class="card card-pad" style="margin-top:16px">
         <div class="rule-title">Human / agent split</div>
-        <p class="small muted" style="margin:8px 0 0"><b style="color:var(--text)">HTML labs</b> are for seeing, touching and inspecting the design space. <b style="color:var(--text)">Python</b> is the reproducible palette/math engine for agents and build tooling. The inline compiler above remains intentionally lightweight and exploratory; it must not silently override the Python engine when exact generation or geometry provenance matters.</p>
+        <p class="small muted" style="margin:8px 0 0"><b style="color:var(--text)">HTML labs</b> are for seeing, touching and inspecting the design space. <b style="color:var(--text)">Python engines</b> own reproducible palette/math and typography relationships for agents and build tooling. The inline compiler remains intentionally lightweight: it must not silently override either canonical engine when exact color geometry, type-system selection or provenance matters.</p>
       </div>
     </div>
   </section>
@@ -519,7 +531,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <div class="section-head">
         <div><div class="eyebrow">01 / grammar</div><h2>Separate the decisions.</h2></div>
         <p>
-          The system stays generative only if layout, material, color and interaction remain separable.
+          The system stays generative only if layout, material, color, typography and interaction remain separable.
           Choosing one must not silently force the others.
         </p>
       </div>
@@ -527,6 +539,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <article class="card principle"><div class="num">8→1</div><h3>Hierarchy / where</h3><p>Phi Flow assigns authority and reading order: claim → context → proof → decision → metadata → exit.</p></article>
         <article class="card principle"><div class="num">□</div><h3>Material / what</h3><p>Oxide, Cryo, Paper, Signal and hero languages define surface character without replacing the layout contract.</p></article>
         <article class="card principle"><div class="num">τ φ ρ</div><h3>Color / relation</h3><p>Spiral families, convergence nodes and Rauzy samples create related color behavior rather than arbitrary swatch picking.</p></article>
+        <article class="card principle"><div class="num">Aa</div><h3>Typography / voice</h3><p>Semantic jobs become typography genomes first; font names are selected afterward under an explicit relationship mode and validated as a realized system.</p></article>
         <article class="card principle"><div class="num">z</div><h3>Interaction / handoff</h3><p>Prompts, overlays and temporary emphasis route attention; semantic content remains the destination.</p></article>
       </div>
     </div>
@@ -537,9 +550,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <div class="section-head">
         <div><div class="eyebrow">02 / agent compiler</div><h2>Build a bounded design packet.</h2></div>
         <p>
-          Select the application, material and mathematical color behavior. The packet records choices,
+          Select the application, material, typographic relationship and mathematical color behavior. The packet records choices,
           source authority and prohibitions so another agent can build without cloning this page.
-          This browser preview is exploratory; use <code>fibonacci_hex_palettes.py</code> when reproducible generated palettes, geometry reports or provenance are required.
+          This browser preview is exploratory; use <code>fibonacci_hex_palettes.py</code> for canonical color relationships and <code>typography_engine.py</code> for canonical typography selection/validation.
         </p>
       </div>
 
@@ -577,6 +590,18 @@ input[type=range]{width:100%;accent-color:var(--accent)}
                 <option value="oxide">Oxide Ledger</option>
                 <option value="paper">Orbital Paper</option>
                 <option value="guide">Guide Pattern</option>
+              </select>
+            </div>
+
+            <div class="control">
+              <label for="typePairing">Type relationship <small>canonical Python engine</small></label>
+              <select id="typePairing">
+                <option value="utility">Utility</option>
+                <option value="counterpoint">Counterpoint</option>
+                <option value="kinship">Kinship</option>
+                <option value="echo">Echo</option>
+                <option value="solo">Solo</option>
+                <option value="tension">Tension</option>
               </select>
             </div>
 
@@ -925,7 +950,8 @@ const SOURCES={
   colorBase:{file:'fibonacci_hex_convergence_lab.html',sha256:'d611cf9301e74a6e314fd7bacec10f64dde87eecaf7baf65a4c1ea401125de9d',hash_status:'carried-forward; source file not present in this review bundle'},
   colorDynamic:{file:'fibonacci_hex_multispiral_rauzy_lab.html',sha256:'8ef24367741283a174c8c2dd845b043c2bf572831318ba4dbfb6dd3d0f4793a7',hash_status:'carried-forward; source file not present in this review bundle'},
   geometryLab:{file:'fibonacci_hex_multispiral_rauzy_geometry_lab.html',sha256:'a60f1bd9e8bdf8706e2e842e11f737349a7b5d8a2b98d4fde5e3c2f683fdf31e',hash_status:'carried-forward; source file not present in this review bundle'},
-  paletteEngine:{file:'fibonacci_hex_palettes.py',sha256:'85374999f414d04e0527654482fe376d30470970e311774eec9544a882e3e8c7',hash_status:'verified against bundled canonical engine'}
+  paletteEngine:{file:'fibonacci_hex_palettes.py',sha256:'85374999f414d04e0527654482fe376d30470970e311774eec9544a882e3e8c7',hash_status:'verified against bundled canonical engine'},
+  typographyEngine:{file:'typography_engine.py',sha256:'8bace508896190caee077b144f324a3d0584294c458822c768708fc7db364d1e',hash_status:'verified against canonical engine integrated in this revision'}
 };
 
 const SPIRALS={
@@ -1074,7 +1100,8 @@ function packet(){
       style_routing:SOURCES.uiMaster,
       dynamic_color:SOURCES.colorDynamic,
       palette_geometry:SOURCES.geometryLab,
-      canonical_palette_engine:SOURCES.paletteEngine
+      canonical_palette_engine:SOURCES.paletteEngine,
+      canonical_typography_engine:SOURCES.typographyEngine
     },
     source_name_policy:'Use repository-canonical filenames only; browser-download suffixes are not source authority.',
     intent:{
@@ -1115,6 +1142,14 @@ function packet(){
       tokens:tokenEvidence,
       rule:'Use generated relationships as input. References supply relationships and constraints, not a recognizable accent set. Validate rendered-state contrast before assigning semantic color roles; tokens below 4.5:1/3:1 are role-limited unless an adjustment is recorded.'
     },
+    typography:{
+      pairing_mode:$('typePairing').value,
+      tokens_source:'canonical-external-engine',
+      canonical_engine:'typography_engine.py',
+      thesis_status:'derive project thesis from material, information topology, content density and audience before the canonical engine call',
+      catalog_status:'ILLUSTRATIVE_TRAITS_NOT_MEASURED_FROM_FONT_FILES',
+      rule:'Generate semantic jobs and typography genomes first; select font names afterward under the requested relationship mode, then validate the realized system.'
+    },
     interaction:{
       rule:'Temporary prompts and overlays route to semantic content; they do not become the destination.',
       motion:'State-only; support prefers-reduced-motion.'
@@ -1122,6 +1157,7 @@ function packet(){
     adjustments:[],
     prohibitions:[
       'Do not clone a full reference palette + type + geometry signature.',
+      'Do not default to bold sans + italic serif + mono labels; typography must earn its role mapping.',
       'Do not curve or rotate body copy to imitate a spiral.',
       'Do not make a card per tile or fill every tile.',
       'Do not force desktop geometry onto mobile.',
@@ -1165,12 +1201,12 @@ function updateCompiler(){
   $('previewCopy').textContent=p.material.tone+' · '+SPIRALS[p.color.family].note;
   applyMaterialPreview(p.material.id);
   $('paletteStrip').innerHTML=palette.map((c,i)=>`<button type="button" title="${c}" style="background:${c}" data-copy="${c}"><span>${i+1}</span></button>`).join('');
-  $('packetStatus').textContent=`${p.color.family_name} / ${p.color.extraction}`;
+  $('packetStatus').textContent=`${p.color.family_name} / ${p.color.extraction} / type:${p.typography.pairing_mode}`;
 }
 $('appType').addEventListener('change',e=>{
   const r=APP_ROUTES[e.target.value];if(r?.material)$('material').value=r.material;updateCompiler();
 });
-for(const id of ['material','spiralFamily','extraction','designName']) $(id).addEventListener('input',updateCompiler);
+for(const id of ['material','typePairing','spiralFamily','extraction','designName']) $(id).addEventListener('input',updateCompiler);
 $('seedPicker').addEventListener('input',e=>{$('seedHex').value=e.target.value.toUpperCase();updateCompiler()});
 $('seedHex').addEventListener('input',e=>{if(hexOk(e.target.value)){e.target.value=e.target.value.toUpperCase();updateCompiler()}});
 $('paletteStrip').addEventListener('click',async e=>{

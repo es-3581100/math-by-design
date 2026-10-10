@@ -6,7 +6,7 @@
 
 A small agent-facing design grammar for building interfaces from **hierarchy, material, mathematical color relationships, and interaction behavior** without collapsing those decisions into one reusable template.
 
-The project is intentionally split into human/dev references and a callable palette engine:
+The project is intentionally split into human/dev references and callable palette + typography engines:
 
 - **`math-by-design.html`** — master router/compiler/playground. Start here.
 - **`fibonacci-landing-page-template.html`** — canonical Phi Flow `8 → 5 → 3 → 2 → 1 → 1` layout contract.
@@ -16,12 +16,15 @@ The project is intentionally split into human/dev references and a callable pale
 - **`fibonacci_hex_multispiral_rauzy_lab.html`** — multi-family spiral color generation plus Tribonacci Rauzy A/B/C spatial sampling.
 - **`fibonacci_hex_multispiral_rauzy_geometry_lab.html`** — interactive palette geometry analysis in the RGB cube with PCA-style shape metrics, hull/gray-axis measures and null-model context.
 - **`fibonacci_hex_palettes.py`** — canonical reproducible SymPy/NumPy palette engine for agents and build tooling.
+- **`typography_engine.py`** — canonical causal NumPy/SymPy typography engine: job graph → genome → candidate system → relationship scoring → realized validation.
+- **`typography_engine_smoke_test.py`** — bounded integration smoke for pairing causality, serialization and validation surfaces.
 
 ## The separation that matters
 
 `Phi Flow` answers **where attention moves**.  
 Material language answers **what the interface feels made of**.  
 The math/color layer answers **how related colors are generated**.  
+The typography engine answers **how text roles relate and which font system realizes those roles**.  
 Interaction rules answer **how temporary UI hands attention to semantic content**.
 
 These are references, not templates. Do not clone an entire palette + type + geometry + effect signature from any example.
@@ -51,15 +54,30 @@ For the canonical spiral engine, φ / τ / δ / ρ share the same 90° hue-node 
 
 The geometry report is descriptive rather than a beauty score. It can classify a palette as a line/spine, triangle, planar wedge, folded fan, or volume/cloud and compare flatness against null models; accessibility still has to be validated from the rendered interface.
 
+## Python typography engine
+
+Requires Python with `numpy` and `sympy`.
+
+```bash
+python typography_engine.py --self-test
+python typography_engine_smoke_test.py
+python typography_engine.py
+```
+
+The typography engine is **causal rather than advisory**: it derives role genomes from a project thesis, generates bounded candidate systems, scores those systems under an explicit relationship mode (`solo`, `echo`, `kinship`, `utility`, `counterpoint`, or `tension`), then validates the realized fonts separately from the intended typography. It also records realization error, hierarchy policy, a generic-baseline identity test, and duplicate-signature evidence.
+
+The bundled font catalog is intentionally marked `ILLUSTRATIVE_TRAITS_NOT_MEASURED_FROM_FONT_FILES`. The selection mechanism is real; the catalog trait values remain provisional until a measured font-ingestion layer replaces the hand-authored demo vectors.
+
 ## Suggested agent workflow
 
 1. Read `math-by-design.html` first.
 2. Assign semantic flow before styling.
 3. Choose material language independently from geometry.
-4. Use `fibonacci_hex_palettes.py` only when reproducible generated color relationships or palette-geometry provenance are useful.
-5. Clamp/alter generated colors as needed for actual UI contrast and record the original + adjusted value in `adjustments[]`.
-6. Run the F1–F6 validation gate before expanding visual effects; F6 requires recorded contrast evidence.
-7. Preserve design lineage with exact source names and SHA-256s.
+4. Use `fibonacci_hex_palettes.py` when reproducible generated color relationships or palette-geometry provenance are useful.
+5. Use `typography_engine.py` when typography should contribute identity: derive jobs/genomes first, then select realized fonts under an explicit relationship mode.
+6. Clamp/alter generated colors as needed for actual UI contrast and record the original + adjusted value in `adjustments[]`.
+7. Run the F1–F6 interface validation gate plus the typography engine's realized validation before expanding visual effects.
+8. Preserve design lineage with exact source names and SHA-256s.
 
 ## License
 
